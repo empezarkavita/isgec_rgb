@@ -1,0 +1,433 @@
+swagger: '2.0'
+host: pin-code-recognizer.appspot.com
+info:
+  version: v1
+  title: My API
+paths:
+  /api/Container:
+    get:
+      tags:
+        - Container
+      operationId: ApiContainerGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+    post:
+      tags:
+        - Container
+      operationId: ApiContainerPost
+      consumes:
+        - application/json-patch+json
+        - application/json
+        - text/json
+        - application/*+json
+      produces: []
+      parameters:
+        - name: value
+          in: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  '/api/Container/{id}':
+    get:
+      tags:
+        - Container
+      operationId: ApiContainerByIdGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+    put:
+      tags:
+        - Container
+      operationId: ApiContainerByIdPut
+      consumes:
+        - application/json-patch+json
+        - application/json
+        - text/json
+        - application/*+json
+      produces: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+        - name: value
+          in: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+    delete:
+      tags:
+        - Container
+      operationId: ApiContainerByIdDelete
+      consumes: []
+      produces: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+  /api/Sheet:
+    get:
+      tags:
+        - Drive
+      operationId: ApiSheetGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  '/api/Sheet/{id}':
+    get:
+      tags:
+        - Drive
+      operationId: ApiSheetByIdGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  /api/Sheet/Create:
+    get:
+      tags:
+        - Drive
+      operationId: ApiSheetCreateGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  /home/index:
+    get:
+      tags:
+        - Home
+      operationId: HomeIndexGet
+      consumes: []
+      produces: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+  /home/test:
+    get:
+      tags:
+        - Home
+      operationId: HomeTestGet
+      consumes: []
+      produces: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+  /home/edit:
+    get:
+      tags:
+        - Home
+      operationId: HomeEditGet
+      consumes: []
+      produces: []
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+  /home/post:
+    post:
+      tags:
+        - Home
+      operationId: HomePostPost
+      consumes: []
+      produces: []
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: sbno
+          in: query
+          required: false
+          type: string
+        - name: containerno
+          in: query
+          required: false
+          type: string
+        - name: shippingline
+          in: query
+          required: false
+          type: string
+        - name: movementdate
+          in: query
+          required: false
+          type: string
+        - name: color
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+  /home/delete:
+    get:
+      tags:
+        - Home
+      operationId: HomeDeleteGet
+      consumes: []
+      produces: []
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+  /api/Drive:
+    get:
+      tags:
+        - Sheet
+      operationId: ApiDriveGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  '/api/Drive/{id}':
+    get:
+      tags:
+        - Sheet
+      operationId: ApiDriveByIdGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  /api/Values:
+    get:
+      tags:
+        - Values
+      operationId: ApiValuesGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+    post:
+      tags:
+        - Values
+      operationId: ApiValuesPost
+      consumes:
+        - application/json-patch+json
+        - application/json
+        - text/json
+        - application/*+json
+      produces: []
+      parameters:
+        - name: value
+          in: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  '/api/Values/{id}':
+    get:
+      tags:
+        - Values
+      operationId: ApiValuesByIdGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+    put:
+      tags:
+        - Values
+      operationId: ApiValuesByIdPut
+      consumes:
+        - application/json-patch+json
+        - application/json
+        - text/json
+        - application/*+json
+      produces: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+        - name: value
+          in: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+    delete:
+      tags:
+        - Values
+      operationId: ApiValuesByIdDelete
+      consumes: []
+      produces: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+  '/api/Yard/GetYardDetails/{id}':
+    get:
+      tags:
+        - Yard
+      operationId: ApiYardGetYardDetailsByIdGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  '/api/Yard/SendToYard/{containerno}/{yardid}':
+    get:
+      tags:
+        - Yard
+      operationId: ApiYardSendToYardByContainernoByYardidGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: containerno
+          in: path
+          required: true
+          type: string
+        - name: yardid
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  /api/Yard/updateYardCapacityToJson:
+    get:
+      tags:
+        - Yard
+      operationId: ApiYardUpdateYardCapacityToJsonGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+definitions: {}

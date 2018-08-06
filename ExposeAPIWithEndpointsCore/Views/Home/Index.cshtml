@@ -1,0 +1,31 @@
+@model IEnumerable<ExposeAPIWithEndpointsCore.Models.Container>  
+@using ExposeAPIWithEndpointsCore.Models;
+<table >
+    <thead>
+        <tr>
+            <th>Id</th>                      
+            <th>Sb No</th>  
+            <th>Container No</th>  
+            <th>Shipping Line</th>  
+            <th>Movement Date</th>
+            <th></th> 
+            <th></th> 
+        </tr> 
+    </thead>
+   <tbody>  
+          @foreach (var item in Model)  
+          {
+              <tr>
+                  <td>@item.id</td>
+                  <td>@item.sbno</td>
+                  <td>@item.containerno</td>
+                  <td>@item.shippingline</td>
+                  <td>@item.movementdate</td>
+                  <td>@Html.ActionLink("Edit", "Edit", new { Id = @item.id })</td>
+                  <td>@Html.ActionLink("Delete", "Delete", new { Id = @item.id }, new { onclick="return confirm('Are you want to delete record?');" } )</td>
+              </tr>  
+          }
+    </tbody>
+</table>
+<br/>
+@Html.ActionLink("Add Item", "Edit", new { Id = 0})

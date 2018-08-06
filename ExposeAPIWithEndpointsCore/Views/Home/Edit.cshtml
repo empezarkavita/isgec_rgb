@@ -1,0 +1,60 @@
+@model ExposeAPIWithEndpointsCore.Models.Container 
+@using ExposeAPIWithEndpointsCore.Models;;
+
+@using (Html.BeginForm("Post", "Home", FormMethod.Post, new { }))  
+{  
+    @Html.ValidationSummary(true)  
+      
+    <fieldset>  
+        <legend></legend>  
+        <div class="editor-label">  
+           ID  
+        </div>  
+        <div class="editor-field">  
+            @Html.TextBoxFor(model => model.id, new { @readonly = "readonly"} )  
+        </div>  
+        <div class="editor-label">  
+           SB Number  
+        </div>  
+        <div class="editor-field">  
+            @Html.TextBoxFor(model => model.sbno)  
+            @Html.ValidationMessageFor(model => model.sbno)  
+        </div> 
+        <div class="editor-label">  
+           Container Number  
+        </div>
+        <div class="editor-field">  
+            @Html.TextBoxFor(model => model.containerno)  
+            @Html.ValidationMessageFor(model => model.containerno)  
+        </div>   
+  
+
+
+        <div class="editor-label">  
+           Shipping Line  
+        </div>
+        <div class="editor-field">  
+            @Html.TextBoxFor(model => model.shippingline)  
+            @Html.ValidationMessageFor(model => model.shippingline)  
+        </div>   
+
+        
+  <div class="editor-label">  
+           movement date  
+        </div>
+        <div class="editor-field">  
+            @Html.TextBoxFor(model => model.movementdate)  
+            @Html.ValidationMessageFor(model => model.movementdate)  
+        </div>   
+
+
+        <p>  
+            <input type="submit" value="Update" id="btnsave"  />  
+        </p>  
+    </fieldset>  
+}  
+<div>  
+    @Html.ActionLink("Close", "Index")  
+</div> 
+
+
