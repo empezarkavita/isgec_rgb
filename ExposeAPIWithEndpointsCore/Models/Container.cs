@@ -32,4 +32,15 @@ namespace ExposeAPIWithEndpointsCore.Models
 
         public string party;
     }
+
+    public class msc
+    {
+         public string containerno;
+         public string party;
+         public string status;
+         public string color;
+         public string footer;
+
+    }
+
 }

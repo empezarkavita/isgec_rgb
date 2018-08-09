@@ -240,6 +240,42 @@ paths:
       responses:
         '200':
           description: Success
+  '/api/msc/GetContainerDetails/{id}':
+    get:
+      tags:
+        - Msc
+      operationId: ApiMscGetContainerDetailsByIdGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  /api/msc/Create:
+    get:
+      tags:
+        - Msc
+      operationId: ApiMscCreateGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
   /api/Drive:
     get:
       tags:
@@ -409,22 +445,6 @@ paths:
           in: path
           required: true
           type: string
-      responses:
-        '200':
-          description: Success
-          schema:
-            type: string
-  /api/Yard/updateYardCapacityToJson:
-    get:
-      tags:
-        - Yard
-      operationId: ApiYardUpdateYardCapacityToJsonGet
-      consumes: []
-      produces:
-        - text/plain
-        - application/json
-        - text/json
-      parameters: []
       responses:
         '200':
           description: Success
