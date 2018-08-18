@@ -27,6 +27,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         const string GREEN = "#99008000";
 
         const string sheet = "capacity";
+        const string yard_sheet = "yard";
 
 
         // GET api/values
@@ -120,8 +121,16 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 cell = "B3";
 
             }
-           
 
+            UpdateCapacityToSheet(service, count, cell);
+            InsertContainerToSheet(service, containerno, yardid);
+            // service.Dispose();
+
+            return "{'response':'Location Saved'}";
+        }
+
+        private static void UpdateCapacityToSheet(SheetsService service, int count, string cell)
+        {
             var range = $"{sheet}!" + cell;
             var valueRange = new ValueRange();
 
@@ -131,10 +140,19 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             var updateRequest = service.Spreadsheets.Values.Update(valueRange, SpreadsheetId, range);
             updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
             var appendReponse = updateRequest.Execute();
+        }
 
-             // service.Dispose();
+        private static void InsertContainerToSheet(SheetsService service, string containerno, string yardid)
+        {
+            var range = $"{yard_sheet}!A:B";
+            var valueRange = new ValueRange();
 
-            return "{'response':'Location Saved'}";
+            var oblist = new List<object>() { yardid, containerno };
+            valueRange.Values = new List<IList<object>> { oblist };
+
+            var appendRequest = service.Spreadsheets.Values.Append(valueRange, SpreadsheetId, range);
+            appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
+            var appendReponse = appendRequest.Execute();
         }
 
         private SheetsService getService()
