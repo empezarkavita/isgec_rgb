@@ -11,13 +11,15 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="*" />
     <PackageReference Include="MySql.Data" Version="*" />
+    <PackageReference Include="Google.Cloud.Storage.V1" Version="*" />
+
 
   </ItemGroup>
   <ItemGroup>
     <None Include="app.yaml" CopyToOutputDirectory="Always" />
     <None Update="client_secret.json" CopyToOutputDirectory="Always" />
     <None Update="capacity_client_secret.json" CopyToOutputDirectory="Always" />
-    <None Update="output.json" CopyToOutputDirectory="Always" />
+    <None Update="output.json" CopyToOutputDirectory="Always" />    
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />  

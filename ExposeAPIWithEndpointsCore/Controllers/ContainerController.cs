@@ -5,6 +5,14 @@ using System.Threading.Tasks;
 using ExposeAPIWithEndpointsCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.FileProviders;
+using Google.Apis.Storage.v1;
+using Google.Apis.Storage.v1.Data;
+using Google.Cloud.Storage.V1;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
 
 namespace ExposeAPIWithEndpointsCore.Controllers
 {
@@ -12,12 +20,16 @@ namespace ExposeAPIWithEndpointsCore.Controllers
     public class ContainerController : Controller
     {
         // GET api/values
+
+        
+            static readonly string[] Scopes = { StorageService.Scope.DevstorageReadWrite};
+
         [HttpGet]
         public string Get()
         {
 
             ContainerContext context = HttpContext.RequestServices.GetService(typeof(ContainerContext)) as ContainerContext;
-            var containers_info = context.GetAllContainers();         
+            var containers_info = context.GetAllContainers();
             return JsonConvert.SerializeObject(containers_info);
         }
 
@@ -25,8 +37,8 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         [HttpGet("{id}")]
         public string Get(string id)
         {
-             ContainerContext context = HttpContext.RequestServices.GetService(typeof(ContainerContext)) as ContainerContext;
-      
+            ContainerContext context = HttpContext.RequestServices.GetService(typeof(ContainerContext)) as ContainerContext;
+
             var containers = context.GetAllContainers();
             var containerdata = containers.Where(x => x.containerno == id).FirstOrDefault();
             if (containerdata == null)
@@ -42,11 +54,50 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        // [HttpPost]
+        // public string PostFile(IFormFile file)
+        // {
+        //     // var file = files[0];
+        //     if (file == null || file.Length == 0)
+        //         return "file not selected";
+
+        //     var path = Path.Combine(
+        //                 Directory.GetCurrentDirectory(), "wwwroot",
+        //                 file.FileName);
+
+        //     using (var stream = new FileStream(path, FileMode.Create))
+        //     {
+        //         file.CopyToAsync(stream);
+        //         PushToCloudStorage(stream,file.FileName);
+        //     }
+
+
+          
+        //     return "";
+        // }
+
+        private static void PushToCloudStorage(FileStream stream,string name)
         {
+           
+            GoogleCredential credential;
+            using (var gstream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            {
+                credential = GoogleCredential.FromStream(gstream)
+                    .CreateScoped(Scopes);
+            }
+
+            var client = StorageClient.Create(credential);
+
+            // Create a bucket
+            string bucketName = "rgb";
+           // var bucket = client.CreateBucket("pin-code-recognizer", bucketName);
+
+            // Upload some files
+          
+            var obj2 = client.UploadObject(bucketName, "isgec/"+name, "text/plain", stream);
         }
+        // POST api/values
+
 
         // PUT api/values/5
         [HttpPut("{id}")]
