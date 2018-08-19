@@ -431,4 +431,28 @@ paths:
           description: Success
           schema:
             type: string
+  /api/Yard/PostToYard:
+    post:
+      tags:
+        - Yard
+      operationId: ApiYardPostToYardPost
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: containerno
+          in: query
+          required: false
+          type: string
+        - name: yardid
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
 definitions: {}

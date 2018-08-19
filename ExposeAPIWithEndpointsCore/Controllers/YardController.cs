@@ -9,14 +9,10 @@ using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using System.IO;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Hosting;
 using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Storage.v1;
-using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
 
 
 namespace ExposeAPIWithEndpointsCore.Controllers
@@ -134,7 +130,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             }
 
             UpdateCapacityToSheet(service, count, cell);
-            InsertContainerToSheet(service, containerno, yardid, "");
+            InsertContainerToSheet(service, containerno, yardid, "","");
             // service.Dispose();
 
             return "{'response':'Location Saved'}";
@@ -153,12 +149,12 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             var appendReponse = updateRequest.Execute();
         }
 
-        private static void InsertContainerToSheet(SheetsService service, string containerno, string yardid, string snapshot)
+        private static void InsertContainerToSheet(SheetsService service, string containerno, string yardid, string snapshot,string color)
         {
-            var range = $"{yard_sheet}!A:C";
+            var range = $"{yard_sheet}!A:D";
             var valueRange = new ValueRange();
-
-            var oblist = new List<object>() { containerno, yardid, snapshot };
+            string captureDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            var oblist = new List<object>() { containerno, yardid,captureDate, snapshot };
             valueRange.Values = new List<IList<object>> { oblist };
 
             var appendRequest = service.Spreadsheets.Values.Append(valueRange, SpreadsheetId, range);
@@ -235,9 +231,42 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         }
 
 
+        // [HttpPost]
+        // [Route("upload")]
+        // public string PostUserImage()
+        // {
+
+        // try
+        // {
+        //     var file = Request.Form.Files[0];
+        //     string folderName = "Upload";
+        //     string webRootPath = _hostingEnvironment.WebRootPath;
+        //     string newPath = Path.Combine(webRootPath, folderName);
+        //     if (!Directory.Exists(newPath))
+        //     {
+        //         Directory.CreateDirectory(newPath);
+        //     }
+        //     if (file.Length > 0)
+        //     {
+        //         string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+        //         string fullPath = Path.Combine(newPath, fileName);
+        //         using (var stream = new FileStream(fullPath, FileMode.Create))
+        //         {
+        //             file.CopyTo(stream);
+        //         }
+        //     }
+        //     return "Upload Successful.";
+        // }
+        // catch (System.Exception ex)
+        // {
+        //     return "Upload Failed: " + ex.Message;
+        // }
+
+        // }
+
         [HttpPost]
         [Route("api/Yard/PostToYard")]
-        public string PostToYard(string containerno, string yardid, IFormFile file)
+        public string PostToYard(string containerno, string yardid)
         {
 
             SheetsService service = getService();
@@ -271,10 +300,11 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
             }
 
+            var file = Request.Form.Files[0];
             UpdateCapacityToSheet(service, count, cell);
 
             string snapshot = UploadAndGetSnapshotUrl(file, containerno);
-            InsertContainerToSheet(service, containerno, yardid, snapshot);
+            InsertContainerToSheet(service, containerno, yardid, snapshot,yardcolor);
 
 
             return "{'response':'Location Saved'}";
