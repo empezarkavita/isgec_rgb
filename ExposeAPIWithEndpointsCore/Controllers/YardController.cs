@@ -35,6 +35,8 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
 
         // GET api/values
+           private static TimeZoneInfo INDIAN_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+
         static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
         static readonly string[] StorageScope = { StorageService.Scope.DevstorageReadWrite };
         const string ApplicationName = "Current Legislators";
@@ -153,7 +155,9 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         {
             var range = $"{yard_sheet}!A:D";
             var valueRange = new ValueRange();
-            string captureDate = DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss");
+            DateTime indianTime =  TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE);
+
+            string captureDate = indianTime.ToString("dd-MMM-yyyy HH:mm:ss");
             var oblist = new List<object>() { containerno, yardid, captureDate, snapshot };
             valueRange.Values = new List<IList<object>> { oblist };
 
