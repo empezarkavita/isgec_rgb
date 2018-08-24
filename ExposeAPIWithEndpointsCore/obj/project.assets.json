@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.0": {
+      "Google.Api.CommonProtos/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Protobuf": "3.3.0",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Google.Api.CommonProtos.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Google.Api.CommonProtos.dll": {}
+        }
+      },
       "Google.Api.Gax/2.2.1": {
         "type": "package",
         "dependencies": {
@@ -15,6 +28,23 @@
         },
         "runtime": {
           "lib/netstandard1.3/Google.Api.Gax.dll": {}
+        }
+      },
+      "Google.Api.Gax.Grpc/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "Google.Api.CommonProtos": "1.1.0",
+          "Google.Api.Gax": "2.2.1",
+          "Google.Apis.Auth": "1.30.0",
+          "Grpc.Auth": "1.7.0",
+          "Grpc.Core": "1.7.1",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/Google.Api.Gax.Grpc.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/Google.Api.Gax.Grpc.dll": {}
         }
       },
       "Google.Api.Gax.Rest/2.2.1": {
@@ -108,6 +138,35 @@
           "lib/netstandard1.3/Google.Apis.Storage.v1.dll": {}
         }
       },
+      "Google.Cloud.Firestore/1.0.0-beta01": {
+        "type": "package",
+        "dependencies": {
+          "Google.Cloud.Firestore.V1Beta1": "1.0.0-beta01",
+          "Grpc.Core": "1.7.1",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/Google.Cloud.Firestore.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/Google.Cloud.Firestore.dll": {}
+        }
+      },
+      "Google.Cloud.Firestore.V1Beta1/1.0.0-beta01": {
+        "type": "package",
+        "dependencies": {
+          "Google.Api.Gax.Grpc": "2.2.1",
+          "Google.LongRunning": "1.0.0",
+          "Grpc.Core": "1.7.1",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/Google.Cloud.Firestore.V1Beta1.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/Google.Cloud.Firestore.V1Beta1.dll": {}
+        }
+      },
       "Google.Cloud.Storage.V1/2.1.0": {
         "type": "package",
         "dependencies": {
@@ -122,6 +181,21 @@
           "lib/netstandard1.3/Google.Cloud.Storage.V1.dll": {}
         }
       },
+      "Google.LongRunning/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Api.Gax.Grpc": "2.1.0",
+          "Google.Protobuf": "3.4.1",
+          "Grpc.Core": "1.6.1",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/Google.LongRunning.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/Google.LongRunning.dll": {}
+        }
+      },
       "Google.Protobuf/3.5.1": {
         "type": "package",
         "dependencies": {
@@ -132,6 +206,62 @@
         },
         "runtime": {
           "lib/netstandard1.0/Google.Protobuf.dll": {}
+        }
+      },
+      "Grpc.Auth/1.7.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis.Auth": "1.21.0",
+          "Grpc.Core": "1.7.0",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/Grpc.Auth.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/Grpc.Auth.dll": {}
+        }
+      },
+      "Grpc.Core/1.7.1": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "System.Interactive.Async": "3.1.1",
+          "System.Runtime.Loader": "4.0.0",
+          "System.Threading.Thread": "4.0.0",
+          "System.Threading.ThreadPool": "4.0.10"
+        },
+        "compile": {
+          "lib/netstandard1.5/Grpc.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/Grpc.Core.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux/native/libgrpc_csharp_ext.x64.so": {
+            "assetType": "native",
+            "rid": "linux"
+          },
+          "runtimes/linux/native/libgrpc_csharp_ext.x86.so": {
+            "assetType": "native",
+            "rid": "linux"
+          },
+          "runtimes/osx/native/libgrpc_csharp_ext.x64.dylib": {
+            "assetType": "native",
+            "rid": "osx"
+          },
+          "runtimes/osx/native/libgrpc_csharp_ext.x86.dylib": {
+            "assetType": "native",
+            "rid": "osx"
+          },
+          "runtimes/win/native/grpc_csharp_ext.x64.dll": {
+            "assetType": "native",
+            "rid": "win"
+          },
+          "runtimes/win/native/grpc_csharp_ext.x86.dll": {
+            "assetType": "native",
+            "rid": "win"
+          }
         }
       },
       "Libuv/1.10.0": {
@@ -4268,6 +4398,20 @@
           }
         }
       },
+      "System.Runtime.Loader/4.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.IO": "4.1.0",
+          "System.Reflection": "4.1.0",
+          "System.Runtime": "4.1.0"
+        },
+        "compile": {
+          "ref/netstandard1.5/System.Runtime.Loader.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/System.Runtime.Loader.dll": {}
+        }
+      },
       "System.Runtime.Numerics/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -4991,6 +5135,19 @@
     }
   },
   "libraries": {
+    "Google.Api.CommonProtos/1.1.0": {
+      "sha512": "24Neiw0ZSFBYJ39eUPm2LHWs3g/XrCgFjsp9mLuwnjMduMEPCcyf4d9xJzm7MW0MihA4IB+siKtcaSLD2yXfNw==",
+      "type": "package",
+      "path": "google.api.commonprotos/1.1.0",
+      "files": [
+        "google.api.commonprotos.1.1.0.nupkg.sha512",
+        "google.api.commonprotos.nuspec",
+        "lib/net45/Google.Api.CommonProtos.dll",
+        "lib/net45/Google.Api.CommonProtos.xml",
+        "lib/netstandard1.3/Google.Api.CommonProtos.dll",
+        "lib/netstandard1.3/Google.Api.CommonProtos.xml"
+      ]
+    },
     "Google.Api.Gax/2.2.1": {
       "sha512": "Dhqg6OBw+mrZrbHTJDrUaXEvLiyBOyTw3DJ5tz2sLgBN6uwPMA2e2hy52GKeFZXFsisq78qsot5lrahOM/nC6Q==",
       "type": "package",
@@ -5004,6 +5161,21 @@
         "lib/netstandard1.3/Google.Api.Gax.dll",
         "lib/netstandard1.3/Google.Api.Gax.pdb",
         "lib/netstandard1.3/Google.Api.Gax.xml"
+      ]
+    },
+    "Google.Api.Gax.Grpc/2.2.1": {
+      "sha512": "DTHYN1cXzNZag+69ccbMwE+TPzofnQHfsT4r9Dr03AA5LTCgIH1Op5+PlBvlEscqgsbqWDTcVqVh1hx3H6Lx6g==",
+      "type": "package",
+      "path": "google.api.gax.grpc/2.2.1",
+      "files": [
+        "google.api.gax.grpc.2.2.1.nupkg.sha512",
+        "google.api.gax.grpc.nuspec",
+        "lib/net45/Google.Api.Gax.Grpc.dll",
+        "lib/net45/Google.Api.Gax.Grpc.pdb",
+        "lib/net45/Google.Api.Gax.Grpc.xml",
+        "lib/netstandard1.5/Google.Api.Gax.Grpc.dll",
+        "lib/netstandard1.5/Google.Api.Gax.Grpc.pdb",
+        "lib/netstandard1.5/Google.Api.Gax.Grpc.xml"
       ]
     },
     "Google.Api.Gax.Rest/2.2.1": {
@@ -5107,6 +5279,36 @@
         "lib/netstandard1.3/Google.Apis.Storage.v1.xml"
       ]
     },
+    "Google.Cloud.Firestore/1.0.0-beta01": {
+      "sha512": "ABZYqVP/HLEU4XMzXL1RGX1BAdpjRHVaRC2oFNc83fs8JKhSz3ryc4wgd0i3Ok+/Q31tHaEMo7AXpF4QusTU4Q==",
+      "type": "package",
+      "path": "google.cloud.firestore/1.0.0-beta01",
+      "files": [
+        "google.cloud.firestore.1.0.0-beta01.nupkg.sha512",
+        "google.cloud.firestore.nuspec",
+        "lib/net45/Google.Cloud.Firestore.dll",
+        "lib/net45/Google.Cloud.Firestore.pdb",
+        "lib/net45/Google.Cloud.Firestore.xml",
+        "lib/netstandard1.5/Google.Cloud.Firestore.dll",
+        "lib/netstandard1.5/Google.Cloud.Firestore.pdb",
+        "lib/netstandard1.5/Google.Cloud.Firestore.xml"
+      ]
+    },
+    "Google.Cloud.Firestore.V1Beta1/1.0.0-beta01": {
+      "sha512": "cs0+L/UV55Z1SIuPdn+0aEMQaDPP2qoB3FIf/i0Dm6gwrtC66XLW3QS2a88rw5uKXFnhu6vIMerWXDJLRGFyDw==",
+      "type": "package",
+      "path": "google.cloud.firestore.v1beta1/1.0.0-beta01",
+      "files": [
+        "google.cloud.firestore.v1beta1.1.0.0-beta01.nupkg.sha512",
+        "google.cloud.firestore.v1beta1.nuspec",
+        "lib/net45/Google.Cloud.Firestore.V1Beta1.dll",
+        "lib/net45/Google.Cloud.Firestore.V1Beta1.pdb",
+        "lib/net45/Google.Cloud.Firestore.V1Beta1.xml",
+        "lib/netstandard1.5/Google.Cloud.Firestore.V1Beta1.dll",
+        "lib/netstandard1.5/Google.Cloud.Firestore.V1Beta1.pdb",
+        "lib/netstandard1.5/Google.Cloud.Firestore.V1Beta1.xml"
+      ]
+    },
     "Google.Cloud.Storage.V1/2.1.0": {
       "sha512": "gqK3BV6aaefoXa0LH4t4WNffeV8NqnDeleeazwCtu/qGNItgDpQXnrFFx1Si2Fiv10i727vwfZgHF8Wih5hCKA==",
       "type": "package",
@@ -5122,6 +5324,21 @@
         "lib/netstandard1.3/Google.Cloud.Storage.V1.xml"
       ]
     },
+    "Google.LongRunning/1.0.0": {
+      "sha512": "AbZU9XU0mTc/huZwAVVDZzOurgpYwQ0+UIc0yZNBRxfXOvgY593QLdZsUhSNbO3ITN4xomMfoPMRFtFzq29CMg==",
+      "type": "package",
+      "path": "google.longrunning/1.0.0",
+      "files": [
+        "google.longrunning.1.0.0.nupkg.sha512",
+        "google.longrunning.nuspec",
+        "lib/net45/Google.LongRunning.dll",
+        "lib/net45/Google.LongRunning.pdb",
+        "lib/net45/Google.LongRunning.xml",
+        "lib/netstandard1.5/Google.LongRunning.dll",
+        "lib/netstandard1.5/Google.LongRunning.pdb",
+        "lib/netstandard1.5/Google.LongRunning.xml"
+      ]
+    },
     "Google.Protobuf/3.5.1": {
       "sha512": "f2k1VNaB9bfvEsvARzzEL1TZiIpL33KKK3JMH7UANlPlJVptuvsk4qpBZEnz0pORWZOdUHlVwMQuUzFqjJYCxA==",
       "type": "package",
@@ -5133,6 +5350,39 @@
         "lib/net45/Google.Protobuf.xml",
         "lib/netstandard1.0/Google.Protobuf.dll",
         "lib/netstandard1.0/Google.Protobuf.xml"
+      ]
+    },
+    "Grpc.Auth/1.7.0": {
+      "sha512": "6WPWiJ3iRMypWWduJjFiGN9q5IXw66CTb8AKPJthXX1p0bFOWLISWXjLdToR/HGfAtYHwO79XCrXS1Hlm3ffsw==",
+      "type": "package",
+      "path": "grpc.auth/1.7.0",
+      "files": [
+        "grpc.auth.1.7.0.nupkg.sha512",
+        "grpc.auth.nuspec",
+        "lib/net45/Grpc.Auth.dll",
+        "lib/net45/Grpc.Auth.xml",
+        "lib/netstandard1.5/Grpc.Auth.dll",
+        "lib/netstandard1.5/Grpc.Auth.xml"
+      ]
+    },
+    "Grpc.Core/1.7.1": {
+      "sha512": "Gtc5IEnlVOa3k2a4CtTQQk4qMQTiV+1rHehAxB7nOhF6jNFcChmVGHnFyd4V8iuHqx2uwXNyqyrSB033Bat3Cw==",
+      "type": "package",
+      "path": "grpc.core/1.7.1",
+      "files": [
+        "build/net45/Grpc.Core.targets",
+        "grpc.core.1.7.1.nupkg.sha512",
+        "grpc.core.nuspec",
+        "lib/net45/Grpc.Core.dll",
+        "lib/net45/Grpc.Core.xml",
+        "lib/netstandard1.5/Grpc.Core.dll",
+        "lib/netstandard1.5/Grpc.Core.xml",
+        "runtimes/linux/native/libgrpc_csharp_ext.x64.so",
+        "runtimes/linux/native/libgrpc_csharp_ext.x86.so",
+        "runtimes/osx/native/libgrpc_csharp_ext.x64.dylib",
+        "runtimes/osx/native/libgrpc_csharp_ext.x86.dylib",
+        "runtimes/win/native/grpc_csharp_ext.x64.dll",
+        "runtimes/win/native/grpc_csharp_ext.x86.dll"
       ]
     },
     "Libuv/1.10.0": {
@@ -11338,6 +11588,30 @@
         "system.runtime.interopservices.runtimeinformation.nuspec"
       ]
     },
+    "System.Runtime.Loader/4.0.0": {
+      "sha512": "4UN78GOVU/mbDFcXkEWtetJT/sJ0yic2gGk1HSlSpWI0TDf421xnrZTDZnwNBapk1GQeYN7U1lTj/aQB1by6ow==",
+      "type": "package",
+      "path": "system.runtime.loader/4.0.0",
+      "files": [
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/net462/_._",
+        "lib/netstandard1.5/System.Runtime.Loader.dll",
+        "ref/netstandard1.5/System.Runtime.Loader.dll",
+        "ref/netstandard1.5/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/de/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/es/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/fr/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/it/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/ja/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/ko/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/ru/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/zh-hans/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/zh-hant/System.Runtime.Loader.xml",
+        "system.runtime.loader.4.0.0.nupkg.sha512",
+        "system.runtime.loader.nuspec"
+      ]
+    },
     "System.Runtime.Numerics/4.3.0": {
       "sha512": "yMH+MfdzHjy17l2KESnPiF2dwq7T+xLnSJar7slyimAkUh/gTrS9/UQOtv7xarskJ2/XDSNvfLGOBQPjL7PaHQ==",
       "type": "package",
@@ -13064,6 +13338,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
       "Google.Apis.Sheets.v4 >= 1.34.0.1240",
+      "Google.Cloud.Firestore >= 1.0.0-beta01",
       "Google.Cloud.Storage.V1",
       "Microsoft.AspNetCore.All >= 2.0.5",
       "Microsoft.NETCore.App >= 2.0.0",
@@ -13119,6 +13394,10 @@
           "Google.Apis.Sheets.v4": {
             "target": "Package",
             "version": "[1.34.0.1240, )"
+          },
+          "Google.Cloud.Firestore": {
+            "target": "Package",
+            "version": "[1.0.0-beta01, )"
           },
           "Google.Cloud.Storage.V1": {
             "target": "Package",

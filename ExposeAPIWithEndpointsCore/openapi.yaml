@@ -4,6 +4,17 @@ info:
   version: v1
   title: My API
 paths:
+  /view/Angular:
+    get:
+      tags:
+        - Angular
+      operationId: ViewAngularGet
+      consumes: []
+      produces: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
   /api/Container:
     get:
       tags:

@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExposeAPIWithEndpointsCore.Models;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1Beta1;
+using Grpc.Auth;
+using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -11,12 +16,27 @@ namespace ExposeAPIWithEndpointsCore.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+
+
         // GET api/values
         [HttpGet]
         public string Get()
         {
 
-          
+            // GoogleCredential credential = GoogleCredential
+            //             .FromFile("client_secret.json");
+            // ChannelCredentials channelCredentials = credential.ToChannelCredentials();
+            // Channel channel = new Channel(FirestoreClient.DefaultEndpoint.ToString(), channelCredentials);
+            // FirestoreClient firestoreClient = FirestoreClient.Create(channel);
+            // FirestoreDb db = FirestoreDb.Create("project-rgb-8814c", client: firestoreClient);
+
+
+
+
+            // // FirestoreDb db = FirestoreDb.Create("project-rgb-8814c");
+            // DocumentReference document = db.Collection("containers").Document("ejJPYkQu3p6NFwcLFqBV");
+            // DocumentSnapshot snapshot =  await document.SnapshotAsync();
+
             var containers = getcontainerList();
 
             return JsonConvert.SerializeObject(containers);
@@ -27,7 +47,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         // GET api/values/5
         [HttpGet("{id}")]
         public string Get(string id)
-        {      
+        {
             var containers = getcontainerList();
             var containerdata = containers.Where(x => x.containerno == id).FirstOrDefault();
             if (containerdata == null)

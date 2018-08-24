@@ -153,7 +153,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         {
             var range = $"{yard_sheet}!A:D";
             var valueRange = new ValueRange();
-            string captureDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            string captureDate = DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss");
             var oblist = new List<object>() { containerno, yardid, captureDate, snapshot };
             valueRange.Values = new List<IList<object>> { oblist };
 
@@ -388,7 +388,8 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             if (bytes.Length <= 0)
                 return "error";
 
-            string name = containerno + ".jpg";
+            Random random = new Random();  
+            string name = random.Next(0, 1000).ToString()+"_"+containerno + ".jpg";
             var path = Path.Combine(
                         Directory.GetCurrentDirectory(), "wwwroot",
                         name);
