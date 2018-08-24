@@ -35,6 +35,8 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
 
         // GET api/values
+           private static TimeZoneInfo INDIAN_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+
         static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
         static readonly string[] StorageScope = { StorageService.Scope.DevstorageReadWrite };
         const string ApplicationName = "Current Legislators";
@@ -130,7 +132,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             }
 
             UpdateCapacityToSheet(service, count, cell);
-            InsertContainerToSheet(service, containerno, yardid, "","");
+            InsertContainerToSheet(service, containerno, yardid, "", "");
             // service.Dispose();
 
             return "{'response':'Location Saved'}";
@@ -149,12 +151,14 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             var appendReponse = updateRequest.Execute();
         }
 
-        private static void InsertContainerToSheet(SheetsService service, string containerno, string yardid, string snapshot,string color)
+        private static void InsertContainerToSheet(SheetsService service, string containerno, string yardid, string snapshot, string color)
         {
             var range = $"{yard_sheet}!A:D";
             var valueRange = new ValueRange();
-            string captureDate = DateTime.Now.ToString("dd-MMM-yyyy");
-            var oblist = new List<object>() { containerno, yardid,captureDate, snapshot };
+            DateTime indianTime =  TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE);
+
+            string captureDate = indianTime.ToString("dd-MMM-yyyy HH:mm:ss");
+            var oblist = new List<object>() { containerno, yardid, captureDate, snapshot };
             valueRange.Values = new List<IList<object>> { oblist };
 
             var appendRequest = service.Spreadsheets.Values.Append(valueRange, SpreadsheetId, range);
@@ -304,7 +308,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             UpdateCapacityToSheet(service, count, cell);
 
             string snapshot = UploadAndGetSnapshotUrl(file, containerno);
-            InsertContainerToSheet(service, containerno, yardid, snapshot,yardcolor);
+            InsertContainerToSheet(service, containerno, yardid, snapshot, yardcolor);
 
 
             return "{'response':'Location Saved'}";
@@ -341,6 +345,89 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
                 return "https://storage.cloud.google.com/rgb/yard/" + name;
             }
+        }
+
+
+        [HttpPost]
+        [Route("api/Yard/PostToYardBase")]
+        public string PostToYardBase(string containerno, string yardid, string base64image)
+        {
+
+            SheetsService service = getService();
+
+            var yardCapacity = getYardCapacity(service);
+
+            string yardcolor = yardid == "1A" ? getYardColor(yardCapacity.yardA) : getYardColor(yardCapacity.yardB);
+
+
+            var count = 0;
+            var cell = "";
+
+            if (yardid == "1A")
+            {
+                if (yardCapacity.yardA >= 100)
+                {
+                    return "{'response':'YARD 1A CAPACITY IS FULL'}";
+                }
+                count = yardCapacity.yardA + 1;
+                cell = "B2";
+
+            }
+            else
+            {
+                if (yardCapacity.yardB >= 100)
+                {
+                    return "{'response':'YARD 1B CAPACITY IS FULL'}";
+                }
+                count = yardCapacity.yardB + 1;
+                cell = "B3";
+
+            }
+
+
+            UpdateCapacityToSheet(service, count, cell);
+            var snapshot = "";
+            var bytes = Convert.FromBase64String(base64image);
+
+            if (bytes.Length <= 0)
+                return "error";
+
+            Random random = new Random();  
+            string name = random.Next(0, 1000).ToString()+"_"+containerno + ".jpg";
+            var path = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot",
+                        name);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                stream.Write(bytes, 0, bytes.Length);
+                stream.Flush();
+
+                GoogleCredential credential;
+                using (var gstream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+                {
+                    credential = GoogleCredential.FromStream(gstream)
+                        .CreateScoped(StorageScope);
+                }
+
+                var client = StorageClient.Create(credential);
+
+                // Create a bucket
+                string bucketName = "rgb";
+                // var bucket = client.CreateBucket("pin-code-recognizer", bucketName);
+
+                // Upload some files
+
+                var obj2 = client.UploadObject(bucketName, "yard/" + name, "image/jpeg", stream);
+
+                snapshot = "https://storage.cloud.google.com/rgb/yard/" + name;
+            }
+
+       
+            InsertContainerToSheet(service, containerno, yardid, snapshot, yardcolor);
+
+
+            return "{'response':'Location Saved'}";
         }
 
     }

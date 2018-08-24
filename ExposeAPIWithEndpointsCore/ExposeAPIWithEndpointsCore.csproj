@@ -13,7 +13,7 @@
     <PackageReference Include="MySql.Data" Version="*"/>
     <PackageReference Include="Google.Cloud.Storage.V1" Version="*"/>
     <PackageReference Include="FireSharp.Serialization.JsonNet" Version="*"/>
-    <!-- <PackageReference Include="Google.Cloud.Firestore" Version="*"/> -->
+    <PackageReference Include="Google.Cloud.Firestore" Version="1.0.0-beta01"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.yaml" CopyToOutputDirectory="Always"/>

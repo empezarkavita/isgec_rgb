@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExposeAPIWithEndpointsCore.Models;
+using Google.Apis.Auth.OAuth2;
+
+
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using FireSharp.Config;
@@ -77,7 +80,8 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         // }
 
         // public async Task<string> DeleteContainers()
-        // {
+        // {    <!-- <PackageReference Include="Google.Cloud.Firestore" Version="*"/> -->
+
         //     var client = new FireSharp.FirebaseClient(config);
         //     FirebaseResponse response = await client.DeleteTaskAsync("CLHU8825463");
         //     return response.Body;

@@ -26,6 +26,7 @@
         "dependencies": {
           "FireSharp.Serialization.JsonNet": "1.1.0",
           "Google.Apis.Sheets.v4": "1.34.0.1240",
+          "Google.Cloud.Firestore": "1.0.0-beta01",
           "Google.Cloud.Storage.V1": "2.1.0",
           "Microsoft.AspNetCore.All": "2.0.5",
           "Microsoft.NETCore.App": "2.0.0",
@@ -85,6 +86,22 @@
         },
         "compile": {
           "lib/netstandard1.3/Google.Api.Gax.dll": {}
+        }
+      },
+      "Google.Api.Gax.Grpc/2.2.1": {
+        "dependencies": {
+          "Google.Api.CommonProtos": "1.1.0",
+          "Google.Api.Gax": "2.2.1",
+          "Google.Apis.Auth": "1.34.0",
+          "Grpc.Auth": "1.7.0",
+          "Grpc.Core": "1.7.1",
+          "NETStandard.Library": "2.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/Google.Api.Gax.Grpc.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.5/Google.Api.Gax.Grpc.dll": {}
         }
       },
       "Google.Api.Gax.Rest/2.2.1": {
@@ -193,6 +210,33 @@
           "lib/netstandard1.3/Google.Apis.Storage.v1.dll": {}
         }
       },
+      "Google.Cloud.Firestore/1.0.0-beta01": {
+        "dependencies": {
+          "Google.Cloud.Firestore.V1Beta1": "1.0.0-beta01",
+          "Grpc.Core": "1.7.1",
+          "NETStandard.Library": "2.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/Google.Cloud.Firestore.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.5/Google.Cloud.Firestore.dll": {}
+        }
+      },
+      "Google.Cloud.Firestore.V1Beta1/1.0.0-beta01": {
+        "dependencies": {
+          "Google.Api.Gax.Grpc": "2.2.1",
+          "Google.LongRunning": "1.0.0",
+          "Grpc.Core": "1.7.1",
+          "NETStandard.Library": "2.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/Google.Cloud.Firestore.V1Beta1.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.5/Google.Cloud.Firestore.V1Beta1.dll": {}
+        }
+      },
       "Google.Cloud.Storage.V1/2.1.0": {
         "dependencies": {
           "Google.Api.Gax.Rest": "2.2.1",
@@ -209,6 +253,20 @@
           "lib/netstandard1.3/Google.Cloud.Storage.V1.dll": {}
         }
       },
+      "Google.LongRunning/1.0.0": {
+        "dependencies": {
+          "Google.Api.Gax.Grpc": "2.2.1",
+          "Google.Protobuf": "3.5.1",
+          "Grpc.Core": "1.7.1",
+          "NETStandard.Library": "2.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/Google.LongRunning.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.5/Google.LongRunning.dll": {}
+        }
+      },
       "Google.Protobuf/3.5.1": {
         "dependencies": {
           "NETStandard.Library": "2.0.0"
@@ -221,6 +279,60 @@
         },
         "compile": {
           "lib/netstandard1.0/Google.Protobuf.dll": {}
+        }
+      },
+      "Grpc.Auth/1.7.0": {
+        "dependencies": {
+          "Google.Apis.Auth": "1.34.0",
+          "Grpc.Core": "1.7.1",
+          "NETStandard.Library": "2.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/Grpc.Auth.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.5/Grpc.Auth.dll": {}
+        }
+      },
+      "Grpc.Core/1.7.1": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.0",
+          "System.Interactive.Async": "3.1.1",
+          "System.Runtime.Loader": "4.0.0",
+          "System.Threading.Thread": "4.3.0",
+          "System.Threading.ThreadPool": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/Grpc.Core.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux/native/libgrpc_csharp_ext.x64.so": {
+            "rid": "linux",
+            "assetType": "native"
+          },
+          "runtimes/linux/native/libgrpc_csharp_ext.x86.so": {
+            "rid": "linux",
+            "assetType": "native"
+          },
+          "runtimes/osx/native/libgrpc_csharp_ext.x64.dylib": {
+            "rid": "osx",
+            "assetType": "native"
+          },
+          "runtimes/osx/native/libgrpc_csharp_ext.x86.dylib": {
+            "rid": "osx",
+            "assetType": "native"
+          },
+          "runtimes/win/native/grpc_csharp_ext.x64.dll": {
+            "rid": "win",
+            "assetType": "native"
+          },
+          "runtimes/win/native/grpc_csharp_ext.x86.dll": {
+            "rid": "win",
+            "assetType": "native"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.5/Grpc.Core.dll": {}
         }
       },
       "Libuv/1.10.0": {
@@ -4115,6 +4227,13 @@
           }
         }
       },
+      "System.Runtime.Loader/4.0.0": {
+        "dependencies": {
+          "System.IO": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
       "System.Runtime.Numerics/4.3.0": {
         "dependencies": {
           "System.Globalization": "4.3.0",
@@ -4869,6 +4988,13 @@
       "path": "google.api.gax/2.2.1",
       "hashPath": "google.api.gax.2.2.1.nupkg.sha512"
     },
+    "Google.Api.Gax.Grpc/2.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DTHYN1cXzNZag+69ccbMwE+TPzofnQHfsT4r9Dr03AA5LTCgIH1Op5+PlBvlEscqgsbqWDTcVqVh1hx3H6Lx6g==",
+      "path": "google.api.gax.grpc/2.2.1",
+      "hashPath": "google.api.gax.grpc.2.2.1.nupkg.sha512"
+    },
     "Google.Api.Gax.Rest/2.2.1": {
       "type": "package",
       "serviceable": true,
@@ -4911,6 +5037,20 @@
       "path": "google.apis.storage.v1/1.32.0.1035",
       "hashPath": "google.apis.storage.v1.1.32.0.1035.nupkg.sha512"
     },
+    "Google.Cloud.Firestore/1.0.0-beta01": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ABZYqVP/HLEU4XMzXL1RGX1BAdpjRHVaRC2oFNc83fs8JKhSz3ryc4wgd0i3Ok+/Q31tHaEMo7AXpF4QusTU4Q==",
+      "path": "google.cloud.firestore/1.0.0-beta01",
+      "hashPath": "google.cloud.firestore.1.0.0-beta01.nupkg.sha512"
+    },
+    "Google.Cloud.Firestore.V1Beta1/1.0.0-beta01": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cs0+L/UV55Z1SIuPdn+0aEMQaDPP2qoB3FIf/i0Dm6gwrtC66XLW3QS2a88rw5uKXFnhu6vIMerWXDJLRGFyDw==",
+      "path": "google.cloud.firestore.v1beta1/1.0.0-beta01",
+      "hashPath": "google.cloud.firestore.v1beta1.1.0.0-beta01.nupkg.sha512"
+    },
     "Google.Cloud.Storage.V1/2.1.0": {
       "type": "package",
       "serviceable": true,
@@ -4918,12 +5058,33 @@
       "path": "google.cloud.storage.v1/2.1.0",
       "hashPath": "google.cloud.storage.v1.2.1.0.nupkg.sha512"
     },
+    "Google.LongRunning/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AbZU9XU0mTc/huZwAVVDZzOurgpYwQ0+UIc0yZNBRxfXOvgY593QLdZsUhSNbO3ITN4xomMfoPMRFtFzq29CMg==",
+      "path": "google.longrunning/1.0.0",
+      "hashPath": "google.longrunning.1.0.0.nupkg.sha512"
+    },
     "Google.Protobuf/3.5.1": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-f2k1VNaB9bfvEsvARzzEL1TZiIpL33KKK3JMH7UANlPlJVptuvsk4qpBZEnz0pORWZOdUHlVwMQuUzFqjJYCxA==",
       "path": "google.protobuf/3.5.1",
       "hashPath": "google.protobuf.3.5.1.nupkg.sha512"
+    },
+    "Grpc.Auth/1.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6WPWiJ3iRMypWWduJjFiGN9q5IXw66CTb8AKPJthXX1p0bFOWLISWXjLdToR/HGfAtYHwO79XCrXS1Hlm3ffsw==",
+      "path": "grpc.auth/1.7.0",
+      "hashPath": "grpc.auth.1.7.0.nupkg.sha512"
+    },
+    "Grpc.Core/1.7.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Gtc5IEnlVOa3k2a4CtTQQk4qMQTiV+1rHehAxB7nOhF6jNFcChmVGHnFyd4V8iuHqx2uwXNyqyrSB033Bat3Cw==",
+      "path": "grpc.core/1.7.1",
+      "hashPath": "grpc.core.1.7.1.nupkg.sha512"
     },
     "Libuv/1.10.0": {
       "type": "package",
@@ -6716,6 +6877,13 @@
       "sha512": "sha512-cbz4YJMqRDR7oLeMRbdYv7mYzc++17lNhScCX0goO2XpGWdvAt60CGN+FHdePUEHCe/Jy9jUlvNAiNdM+7jsOw==",
       "path": "system.runtime.interopservices.runtimeinformation/4.3.0",
       "hashPath": "system.runtime.interopservices.runtimeinformation.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime.Loader/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4UN78GOVU/mbDFcXkEWtetJT/sJ0yic2gGk1HSlSpWI0TDf421xnrZTDZnwNBapk1GQeYN7U1lTj/aQB1by6ow==",
+      "path": "system.runtime.loader/4.0.0",
+      "hashPath": "system.runtime.loader.4.0.0.nupkg.sha512"
     },
     "System.Runtime.Numerics/4.3.0": {
       "type": "package",
