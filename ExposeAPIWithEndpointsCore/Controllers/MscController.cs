@@ -36,7 +36,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
         // GET api/values/5
         [HttpGet]
-        [Route("api/msc/GetContainerDetails/{id}")]
+        [Route("api/mscExcel/GetContainerDetails/{id}")]
         public string GetContainerDetails(string id)
         {
 
@@ -126,7 +126,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         // }
 
            [HttpGet]
-        [Route("api/msc/Create")]
+        [Route("api/mscExcel/Create")]
         public string Create()
         {
             string path = _hostingEnvironment.ContentRootPath;

@@ -54,28 +54,6 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
         }
 
-        // [HttpPost]
-        // public string PostFile(IFormFile file)
-        // {
-        //     // var file = files[0];
-        //     if (file == null || file.Length == 0)
-        //         return "file not selected";
-
-        //     var path = Path.Combine(
-        //                 Directory.GetCurrentDirectory(), "wwwroot",
-        //                 file.FileName);
-
-        //     using (var stream = new FileStream(path, FileMode.Create))
-        //     {
-        //         file.CopyToAsync(stream);
-        //         PushToCloudStorage(stream,file.FileName);
-        //     }
-
-
-          
-        //     return "";
-        // }
-
         private static void PushToCloudStorage(FileStream stream,string name)
         {
            
