@@ -13,7 +13,8 @@ using Microsoft.AspNetCore.Hosting;
 using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Storage.v1;
 using Google.Cloud.Storage.V1;
-
+using Google.Cloud.Firestore;
+using System.Threading.Tasks;
 
 namespace ExposeAPIWithEndpointsCore.Controllers
 {
@@ -35,16 +36,16 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
 
         // GET api/values
-           private static TimeZoneInfo INDIAN_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+        //private static TimeZoneInfo INDIAN_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
 
         static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
         static readonly string[] StorageScope = { StorageService.Scope.DevstorageReadWrite };
         const string ApplicationName = "Current Legislators";
 
-        const string SpreadsheetId = "1fsCH3MnMsdRXAlXrGmAciGETruNv4Af8TX9U2dAoDpU";
+        const string SpreadsheetId = "10sVqu4KBFiwTFVQr3H2FItSU17tAShuOYOe99LQrD-A";
 
         // static SheetsService service;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        static IHostingEnvironment _hostingEnvironment;
 
         public YardController(IHostingEnvironment hostingEnvironment) => _hostingEnvironment = hostingEnvironment;
 
@@ -151,26 +152,50 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             var appendReponse = updateRequest.Execute();
         }
 
-        private static void InsertContainerToSheet(SheetsService service, string containerno, string yardid, string snapshot, string color)
+        private static async void InsertContainerToSheet(SheetsService service, string containerno, string yardid, string snapshot, string color)
         {
             var range = $"{yard_sheet}!A:D";
             var valueRange = new ValueRange();
-            DateTime indianTime =  TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE);
+           // DateTime indianTime =  TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE);
 
-            string captureDate = indianTime.ToString("dd-MMM-yyyy HH:mm:ss");
+            string captureDate = DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss");
             var oblist = new List<object>() { containerno, yardid, captureDate, snapshot };
             valueRange.Values = new List<IList<object>> { oblist };
 
             var appendRequest = service.Spreadsheets.Values.Append(valueRange, SpreadsheetId, range);
             appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
             var appendReponse = appendRequest.Execute();
+
+            var gcpCredentaialPath = "firestore_client_secret.json";
+                        System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", gcpCredentaialPath);
+           
+            var gcpCredential = GoogleCredential.GetApplicationDefault();
+
+
+            FirestoreDb db = FirestoreDb.Create("rgbfirestore");
+
+            CollectionReference collection = db.Collection("yard-containers");
+
+            DocumentReference docRef = collection.Document(containerno + "_" + Guid.NewGuid());
+
+            Dictionary<string, object> container = new Dictionary<string, object>
+            {
+                { "containerno", containerno },
+                { "snapshot", snapshot },
+                { "yardcolor", color },
+                { "yardid", yardid },
+                { "captureDate",  captureDate} //SentinelValue.ServerTimestamp
+            };
+
+            WriteResult writeResult = await docRef.SetAsync(container);
+
         }
 
         private SheetsService getService()
         {
             SheetsService service;
             GoogleCredential credential;
-            using (var stream = new FileStream("capacity_client_secret.json", FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
             {
                 credential = GoogleCredential.FromStream(stream)
                     .CreateScoped(Scopes);
@@ -350,7 +375,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
         [HttpPost]
         [Route("api/Yard/PostToYardBase")]
-        public string PostToYardBase(string containerno, string yardid, string base64image)
+        public async Task<string> PostToYardBase(string containerno, string yardid, string base64image)
         {
 
             SheetsService service = getService();

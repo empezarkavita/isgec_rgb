@@ -28,6 +28,19 @@
           "lib/net45/FireSharp.Serialization.JsonNet.dll": {}
         }
       },
+      "Google.Api.CommonProtos/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Protobuf": "3.3.0",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Google.Api.CommonProtos.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Google.Api.CommonProtos.dll": {}
+        }
+      },
       "Google.Api.Gax/2.2.1": {
         "type": "package",
         "dependencies": {
@@ -5177,6 +5190,19 @@
         "lib/net45/FireSharp.Serialization.JsonNet.dll"
       ]
     },
+    "Google.Api.CommonProtos/1.1.0": {
+      "sha512": "24Neiw0ZSFBYJ39eUPm2LHWs3g/XrCgFjsp9mLuwnjMduMEPCcyf4d9xJzm7MW0MihA4IB+siKtcaSLD2yXfNw==",
+      "type": "package",
+      "path": "google.api.commonprotos/1.1.0",
+      "files": [
+        "google.api.commonprotos.1.1.0.nupkg.sha512",
+        "google.api.commonprotos.nuspec",
+        "lib/net45/Google.Api.CommonProtos.dll",
+        "lib/net45/Google.Api.CommonProtos.xml",
+        "lib/netstandard1.3/Google.Api.CommonProtos.dll",
+        "lib/netstandard1.3/Google.Api.CommonProtos.xml"
+      ]
+    },
     "Google.Api.Gax/2.2.1": {
       "sha512": "Dhqg6OBw+mrZrbHTJDrUaXEvLiyBOyTw3DJ5tz2sLgBN6uwPMA2e2hy52GKeFZXFsisq78qsot5lrahOM/nC6Q==",
       "type": "package",
@@ -7270,7 +7296,7 @@
       ]
     },
     "Microsoft.Extensions.PlatformAbstractions/1.1.0": {
-      "sha512": "UMlN++q5qqzQ2HH+uOrKxN5fmBXMQDhrYkSaPJxhmyzfJaFPirrVr1raim/Ocq1psAZoB9+7JSAf0GDAX35wUg==",
+      "sha512": "H6ZsQzxYw/6k2DfEQRXdC+vQ6obd6Uba3uGJrnJ2vG4PRXjQZ7seB13JdCfE72abp8E6Fk3gGgDzfJiLZi5ZpQ==",
       "type": "package",
       "path": "microsoft.extensions.platformabstractions/1.1.0",
       "files": [
@@ -13400,28 +13426,33 @@
     ]
   },
   "packageFolders": {
-    "/home/kavita/.nuget/packages/": {},
-    "/usr/share/dotnet/sdk/NuGetFallbackFolder": {}
+    "C:\\Users\\Sajid.Pathan\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/kavita/RGB/RGB-Backend/isgec_rgb/ExposeAPIWithEndpointsCore/ExposeAPIWithEndpointsCore.csproj",
+      "projectUniqueName": "D:\\lbcustinput\\RGB-Backend\\isgec_rgb\\ExposeAPIWithEndpointsCore\\ExposeAPIWithEndpointsCore.csproj",
       "projectName": "ExposeAPIWithEndpointsCore",
-      "projectPath": "/home/kavita/RGB/RGB-Backend/isgec_rgb/ExposeAPIWithEndpointsCore/ExposeAPIWithEndpointsCore.csproj",
-      "packagesPath": "/home/kavita/.nuget/packages/",
-      "outputPath": "/home/kavita/RGB/RGB-Backend/isgec_rgb/ExposeAPIWithEndpointsCore/obj/",
+      "projectPath": "D:\\lbcustinput\\RGB-Backend\\isgec_rgb\\ExposeAPIWithEndpointsCore\\ExposeAPIWithEndpointsCore.csproj",
+      "packagesPath": "C:\\Users\\Sajid.Pathan\\.nuget\\packages\\",
+      "outputPath": "D:\\lbcustinput\\RGB-Backend\\isgec_rgb\\ExposeAPIWithEndpointsCore\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "/usr/share/dotnet/sdk/NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/home/kavita/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Sajid.Pathan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

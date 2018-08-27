@@ -11,34 +11,69 @@ using Newtonsoft.Json;
 using FireSharp.Config;
 using FireSharp.Interfaces;
 using FireSharp.Response;
+using Google.Cloud.Firestore;
+using System.IO;
 
 namespace ExposeAPIWithEndpointsCore.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        // GET api/values
+        [HttpGet]
+        public async Task<string> Get(string container)
+        {
+            var path = Directory.GetCurrentDirectory() +"\\firestore_client_secret.json";
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
+            var credential = GoogleCredential.GetApplicationDefault();
+           
 
-        // IFirebaseConfig config = new FirebaseConfig
-        // {
-        //     AuthSecret = "XwjyqaChiT5FCBq6YmhpsVlccO2e1l9a8XSsB4Z5",
-        //     BasePath = @"https://firestore-70c67.firebaseio.com/"
-        // };
+            FirestoreDb db = FirestoreDb.Create("rgbfirestore");
+
+            CollectionReference collection = db.Collection("msc-mnr");
+
+            DocumentReference docRef = db.Collection("msc-mnr").Document("LA");
+            Dictionary<string, object> city = new Dictionary<string, object>
+            {
+                { "name", "Los Angeles" },
+                { "state", "CA" },
+                { "country", "USA" }
+            };
+            WriteResult writeResult = await docRef.SetAsync(city);
+
+            //DocumentReference document = await collection.SetAsync(new { color = "123", containerno = "1815", footer = "1815", party = "1815", status = "1815" });
+
+            // A DocumentReference doesn't contain the data - it's just a path.
+            // Let's fetch the current document.
+            //DocumentSnapshot snapshot = await document.SnapshotAsync();
 
 
+            //             DocumentReference docRef = db.Collection("cities").Document("LA");
+            // Dictionary<string, object> city = new Dictionary<string, object>
+            // {
+            //     { "name", "Los Angeles" },
+            //     { "state", "CA" },
+            //     { "country", "USA" }
+            // };
+            //             Google.Cloud.Firestore.WriteResult writeResult = await docRef.SetAsync(city);
 
-        // // GET api/values
-        // [HttpGet]
-        // public string Get()
-        // {
-        //     string outval = "asd";
-        //     outval = InsertContainers().Result;
-        //     // outval = GettContainers().Result;
-        //     // outval = DeleteContainers().Result;
-        //     // outval = DeleteContainers().Result;
-        //     //outval = Gettint().Result;
-        //     return outval;
+            // CollectionReference collection = db.Collection("containers");
+            // DocumentReference document = await collection.AddAsync(new { ID = "ABC", Name = "SU" });
 
-        // }
+            // // A DocumentReference doesn't contain the data - it's just a path.
+            // // Let's fetch the current document.
+            // DocumentSnapshot snapshot = await document.SnapshotAsync();
+
+
+            // DocumentReference document = db.Collection("containers").Document("ejJPYkQu3p6NFwcLFqBV");
+            // DocumentSnapshot snapshot =  await document.SnapshotAsync();
+
+            var containers = "";// getcontainerList();
+
+            return JsonConvert.SerializeObject(containers);
+
+
+        }
 
         // public async Task<string> InsertContainers()
         // {

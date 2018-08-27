@@ -90,6 +90,34 @@ paths:
       responses:
         '200':
           description: Success
+  /api/ContainerFire/PostToYardBase:
+    post:
+      tags:
+        - ContainerFire
+      operationId: ApiContainerFirePostToYardBasePost
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: containerno
+          in: query
+          required: false
+          type: string
+        - name: source
+          in: query
+          required: false
+          type: string
+        - name: base64image
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
   /api/Sheet:
     get:
       tags:
@@ -142,6 +170,39 @@ paths:
           description: Success
           schema:
             type: string
+  /view/Firestore/Index:
+    get:
+      tags:
+        - Firestore
+      operationId: ViewFirestoreIndexGet
+      consumes: []
+      produces: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+  /view/Firestore/Yard:
+    get:
+      tags:
+        - Firestore
+      operationId: ViewFirestoreYardGet
+      consumes: []
+      produces: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+  /view/Firestore/Container:
+    get:
+      tags:
+        - Firestore
+      operationId: ViewFirestoreContainerGet
+      consumes: []
+      produces: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
   /home/index:
     get:
       tags:
@@ -232,11 +293,11 @@ paths:
       responses:
         '200':
           description: Success
-  '/api/msc/GetContainerDetails/{id}':
+  '/api/mscExcel/GetContainerDetails/{id}':
     get:
       tags:
         - Msc
-      operationId: ApiMscGetContainerDetailsByIdGet
+      operationId: ApiMscExcelGetContainerDetailsByIdGet
       consumes: []
       produces:
         - text/plain
@@ -252,10 +313,46 @@ paths:
           description: Success
           schema:
             type: string
-  /api/msc/Create:
+  /api/mscExcel/Create:
     get:
       tags:
         - Msc
+      operationId: ApiMscExcelCreateGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  '/api/msc/GetContainerDetails/{containerno}':
+    get:
+      tags:
+        - MscFirebase
+      operationId: ApiMscGetContainerDetailsByContainernoGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: containerno
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  /api/msc/Create:
+    get:
+      tags:
+        - MscFirebase
       operationId: ApiMscCreateGet
       consumes: []
       produces:
@@ -314,90 +411,16 @@ paths:
         - text/plain
         - application/json
         - text/json
-      parameters: []
-      responses:
-        '200':
-          description: Success
-          schema:
-            type: string
-    post:
-      tags:
-        - Values
-      operationId: ApiValuesPost
-      consumes:
-        - application/json-patch+json
-        - application/json
-        - text/json
-        - application/*+json
-      produces: []
       parameters:
-        - name: value
-          in: body
+        - name: container
+          in: query
           required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-  '/api/Values/{id}':
-    get:
-      tags:
-        - Values
-      operationId: ApiValuesByIdGet
-      consumes: []
-      produces:
-        - text/plain
-        - application/json
-        - text/json
-      parameters:
-        - name: id
-          in: path
-          required: true
           type: string
       responses:
         '200':
           description: Success
           schema:
             type: string
-    put:
-      tags:
-        - Values
-      operationId: ApiValuesByIdPut
-      consumes:
-        - application/json-patch+json
-        - application/json
-        - text/json
-        - application/*+json
-      produces: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: integer
-          format: int32
-        - name: value
-          in: body
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-    delete:
-      tags:
-        - Values
-      operationId: ApiValuesByIdDelete
-      consumes: []
-      produces: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: integer
-          format: int32
-      responses:
-        '200':
-          description: Success
   '/api/Yard/GetYardDetails/{id}':
     get:
       tags:

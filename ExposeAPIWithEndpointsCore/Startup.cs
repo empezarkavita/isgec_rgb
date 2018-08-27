@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using ExposeAPIWithEndpointsCore.Models;
+using System.IO;
 
 namespace ExposeAPIWithEndpointsCore
 {
@@ -54,7 +55,21 @@ namespace ExposeAPIWithEndpointsCore
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            app.UseMvc();
+            //Redirect non api calls to angular app that will handle routing of the app.    
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value) && !context.Request.Path.Value.StartsWith("/api/"))
+                {
+                    context.Request.Path = "/index.html";
+                    await next();
+                }
+            });
+            // configure the app to serve index.html from /wwwroot folder    
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            // configure the app for usage as api    
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

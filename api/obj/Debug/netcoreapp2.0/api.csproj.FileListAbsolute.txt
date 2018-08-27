@@ -1,0 +1,10 @@
+D:\lbcustinput\RGB-Backend\isgec_rgb\api\bin\Debug\netcoreapp2.0\api.deps.json
+D:\lbcustinput\RGB-Backend\isgec_rgb\api\bin\Debug\netcoreapp2.0\api.runtimeconfig.json
+D:\lbcustinput\RGB-Backend\isgec_rgb\api\bin\Debug\netcoreapp2.0\api.runtimeconfig.dev.json
+D:\lbcustinput\RGB-Backend\isgec_rgb\api\bin\Debug\netcoreapp2.0\api.dll
+D:\lbcustinput\RGB-Backend\isgec_rgb\api\bin\Debug\netcoreapp2.0\api.pdb
+D:\lbcustinput\RGB-Backend\isgec_rgb\api\obj\Debug\netcoreapp2.0\api.csproj.CoreCompileInputs.cache
+D:\lbcustinput\RGB-Backend\isgec_rgb\api\obj\Debug\netcoreapp2.0\api.AssemblyInfoInputs.cache
+D:\lbcustinput\RGB-Backend\isgec_rgb\api\obj\Debug\netcoreapp2.0\api.AssemblyInfo.cs
+D:\lbcustinput\RGB-Backend\isgec_rgb\api\obj\Debug\netcoreapp2.0\api.dll
+D:\lbcustinput\RGB-Backend\isgec_rgb\api\obj\Debug\netcoreapp2.0\api.pdb
