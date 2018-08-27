@@ -12,37 +12,49 @@
   </head>
   <body>
 
+
+
     <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-		
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>
-							Container No
-						</th>
-						<th>
-							Image
-						</th>
-						<th>
-							Color
-						</th>	
-            	<th>
-							Yard
-						</th>	
-            	<th>
-							Capture Date
-						</th>						
-					</tr>
-				</thead>
-				<tbody id="container-data">
-					
-				</tbody>
-			</table>			
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-sm-6">
+            <table class="table table-bordered table-striped table-hover">
+                <caption>1A</caption>
+                <thead id="yard1A-header" style="background-color: #008000">
+                    <tr>
+                        <th>Container No</th>
+                        <th>Yard</th>
+                        <th>Capture Date</th>
+                        <th>Snapshot</th>
+                    </tr>
+                </thead>
+                <tbody id="yard1A-data">
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <table class="table table-bordered table-striped table-hover">
+                <caption>1B</caption>
+                <thead id="yard1B-header" style="background-color: #008000">
+                    <tr>
+                        <th>Container No</th>
+                        <th>Yard</th>
+                        <th>Capture Date</th>
+                        <th>Snapshot</th>
+                    </tr>
+                </thead>
+                 <tbody id="yard1B-data">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
+
+
+
+
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -65,34 +77,54 @@
         db.settings({ timestampsInSnapshots: true }); 
     </script>
     <script>
-    const containerList = document.querySelector('#container-data');
+    const yard1A = document.querySelector('#yard1A-data');
 
-
+ const yard1B = document.querySelector('#yard1B-data');
 
 // create element & render cafe
 function renderYards(doc){
     let tr = document.createElement('tr');
     let containerno = document.createElement('td');
-    let snapshot = document.createElement('td');
-    let yardcolor = document.createElement('td');
     let yardid = document.createElement('td');
     let captureDate = document.createElement('td');
+    let snapshot = document.createElement('td');
+   // let yardcolor = document.createElement('td');
+   
+   snapshot.setAttribute("style","text-align: center");
+   
+    let yardImage = document.createElement('span');
+    yardImage.setAttribute('id',"myImg");
+    //yardImage.setAttribute('src',doc.data().snapshot);
+    yardImage.setAttribute('class',"glyphicon glyphicon-camera");
+    yardImage.setAttribute('onclick','doSomething("' + doc.data().snapshot +'");');
+    snapshot.appendChild(yardImage);
 
 
     tr.setAttribute('data-id', doc.containerno);
+   // tr.setAttribute('class', doc.data().yardcolor == '#99FF0000' ? '#FF0000' : (doc.data().yardcolor == '#FFFF00' ? 'warning' : '#008000') );
     containerno.textContent = doc.data().containerno;
-    snapshot.textContent = doc.data().snapshot;
-    yardcolor.textContent = doc.data().yardcolor;
+    //snapshot.textContent = doc.data().snapshot;
+    //yardcolor.textContent = doc.data().yardcolor;
     yardid.textContent = doc.data().yardid;
     captureDate.textContent = doc.data().captureDate;
-    tr.setAttribute("style","background-color: #" + doc.data().yardcolor.slice(3))
+    //tr.setAttribute("style","background-color: #" + doc.data().yardcolor.slice(3));
+
     tr.appendChild(containerno);
-    tr.appendChild(snapshot);
-    tr.appendChild(yardcolor);
     tr.appendChild(yardid);
     tr.appendChild(captureDate);
+    tr.appendChild(snapshot);
+  //  tr.appendChild(yardcolor);
+   
 
-    containerList.appendChild(tr);
+
+    if(doc.data().yardid == '1A'){
+        yard1A.prepend(tr);
+        $('#yard1A-header').css("background-color","#" + doc.data().yardcolor.slice(3))
+    }else{
+        yard1B.prepend(tr);
+         $('#yard1B-header').css("background-color","#" + doc.data().yardcolor.slice(3))
+    }
+   
 
     // deleting data
     // cross.addEventListener('click', (e) => {
@@ -101,6 +133,7 @@ function renderYards(doc){
     //     db.collection('cafes').doc(id).delete();
     // });
 }
+
 
 // getting data
 // db.collection('yard-containers').orderBy('captureDate').get().then(snapshot => {
@@ -128,8 +161,14 @@ db.collection('yard-containers').onSnapshot(snapshot => {
         if(change.type == 'added'){
             renderYards(change.doc);
         } else if (change.type == 'removed'){
-            let tr = containerList.querySelector('[data-id=' + change.doc.containerno + ']');
-            containerList.removeChild(tr);
+          if(change.doc.yardid == '1A'){
+ let tr = yard1A.querySelector('[data-id=' + change.doc.containerno + ']');
+            yard1A.removeChild(tr);
+          }else{
+ let tr = yard1B.querySelector('[data-id=' + change.doc.containerno + ']');
+            yard1B.removeChild(tr);
+          }
+           
         }
     });
 });

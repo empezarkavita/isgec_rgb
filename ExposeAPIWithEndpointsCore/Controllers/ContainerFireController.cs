@@ -66,6 +66,8 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
             FirestoreDb db = FirestoreDb.Create("rgbfirestore");
 
+
+
             CollectionReference collection = db.Collection("scanned-containers");
 
             DocumentReference docRef = collection.Document(containerno + "_" + Guid.NewGuid());

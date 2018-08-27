@@ -28,7 +28,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
     public class YardController : Controller
     {
         const string RED = "#99FF0000";
-        const string ORANGE = "#99FFA500";
+        const string ORANGE = "#99FFFF00";
         const string GREEN = "#99008000";
 
         const string sheet = "capacity";

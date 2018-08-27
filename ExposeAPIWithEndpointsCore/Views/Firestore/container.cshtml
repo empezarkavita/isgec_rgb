@@ -92,7 +92,7 @@ function renderContainer(doc){
     tr.appendChild(snapshot);
     tr.appendChild(captureDate);
 
-    containerList.appendChild(tr);
+    containerList.prepend(tr);
 
     // deleting data
     // cross.addEventListener('click', (e) => {

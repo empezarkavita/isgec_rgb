@@ -96,7 +96,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             }
             else if (data.sbno.Length == 0)
             {
-                return "#99FFA500";
+                return "#99FFFF00";
             }
             else
             {
