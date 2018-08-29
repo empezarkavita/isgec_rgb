@@ -14,6 +14,7 @@ using FireSharp.Config;
 using FireSharp.Interfaces;
 using FireSharp.Response;
 using System.Threading.Tasks;
+using Google.Cloud.Firestore;
 
 namespace ExposeAPIWithEndpointsCore.MSC
 {
@@ -61,20 +62,40 @@ namespace ExposeAPIWithEndpointsCore.MSC
         private async Task<string> InsertContainersList()
         {
             IList<IList<object>> values = readContainerListExcel();
-            var client = new FireSharp.FirebaseClient(config);
+
+
+
+            var gcpCredentaialPath = "firestore_client_secret.json";
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", gcpCredentaialPath);
+
+            var gcpCredential = GoogleCredential.GetApplicationDefault();
+
+
+            FirestoreDb db = FirestoreDb.Create("rgbfirestore");
+
+            CollectionReference collection = db.Collection("msc-mnr");
+
 
             if (values != null && values.Count > 0)
             {
                 foreach (var row in values)
                 {
-                    EMnr container = new EMnr();
-                    container.containerno = row[0].ToString().ToUpper();
-                    container.party = row[1].ToString();
-                    container.status = row[2].ToString();
-                    container.color = Common.getColorCode(row[2].ToString());
-                    container.footer = "Status : " + row[2].ToString() + "\n" + (row[2].ToString() == "Allocated" ? "   Party : " + row[1].ToString() : "");
+                    if(row[0].ToString().ToUpper().Length == 11){
+                    DocumentReference docRef = collection.Document(row[0].ToString().ToUpper());
 
-                    await client.SetTaskAsync("MSC/MNR/" + container.containerno, container);
+                    Dictionary<string, object> container = new Dictionary<string, object>
+                    {
+
+                        { "color", Common.getColorCode(row[2].ToString()) },
+                        { "containerno", row[0].ToString().ToUpper() },
+                        { "footer", "Status : " + row[2].ToString() + "\n" + (row[2].ToString() == "Allocated" ? "   Party : " + row[1].ToString() : "") },
+                        { "party", row[1].ToString() },
+                        { "status",  row[2].ToString()} //SentinelValue.ServerTimestamp
+                    };
+
+                    WriteResult writeResult = await docRef.SetAsync(container);
+                    }
+
                 }
             }
             return "Data Saved Successfully";

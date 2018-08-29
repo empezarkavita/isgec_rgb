@@ -13,36 +13,98 @@
 
 
   </head>
-  <body>
+
+
+
+    <body>
+
 
     <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-		
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>
-							Container No
-						</th>
-						<th>
-							Source
-						</th>
-						<th>
-							Image
-						</th>	
-                        <th>
-							Capture Date
-						</th>						
-					</tr>
-				</thead>
-				<tbody id="container-data">
-					
-				</tbody>
-			</table>			
-		</div>
-	</div>
-</div>
+        <br/>
+        <br/>
+
+        <div class="row">
+            <div class="col-lg-9">
+                <table class="table table-bordered table-striped table-hover">
+
+                    <thead>
+                        <tr bgcolor="#FF0000">
+                            <th>Container No</th>
+                            <th>Source</th>
+                            <th>Capture Date (GMT)</th>
+                            <th>Snapshot</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb_red">
+                       
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-3 ">
+                <div class="jumbotron jumbotron-fluid bg-danger" style="background-color:#FF0000;text-align: center">
+                    <div class="container">
+                        <h1 id="tb_red_cnt">0</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-9">
+                <table class="table table-bordered table-striped table-hover">
+
+                    <thead>
+                        <tr bgcolor="#FFFF00">
+                            <th>Container No</th>
+                            <th>Source</th>
+                            <th>Capture Date (GMT)</th>
+                            <th>Snapshot</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb_orange">
+                       
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-3 ">
+                <div class="jumbotron jumbotron-fluid bg-danger" style="background-color:#FFFF00;text-align: center">
+                    <div class="container">
+                        <h1 id="tb_orange_cnt">0</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-sm-9">
+                <table class="table table-bordered table-striped table-hover">
+
+                    <thead>
+                        <tr bgcolor="#008000">
+                            <th>Container No</th>
+                            <th>Source</th>
+                            <th>Capture Date (GMT)</th>
+                            <th>Snapshot</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb_green">
+                    
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-3">
+                <div class="jumbotron jumbotron-fluid bg-danger" style="background-color:#008000;text-align: center">
+                    <div class="container">
+                        <h1 id="tb_green_cnt">0</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+
+
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -68,31 +130,56 @@
 
     </script>
     <script>
-    const containerList = document.querySelector('#container-data');
+const containerListRed = document.querySelector('#tb_red');
+const containerListOrange = document.querySelector('#tb_orange');
+const containerListGreen = document.querySelector('#tb_green');
 
+const containerListRedCnt = document.querySelector('#tb_red_cnt');
+const containerListOrangeCnt = document.querySelector('#tb_orange_cnt');
+const containerListGreenCnt = document.querySelector('#tb_green_cnt');
 
 
 // create element & render cafe
 function renderContainer(doc){
     let tr = document.createElement('tr');
     let containerno = document.createElement('td');
-    let source = document.createElement('td');
-    let snapshot = document.createElement('td');
+    let source = document.createElement('td');  
     let captureDate = document.createElement('td');
+    let snapshot = document.createElement('td');
+
+snapshot.setAttribute("style","text-align: center");
+ let yardImage = document.createElement('span');
+    yardImage.setAttribute('id',"myImg");
+    //yardImage.setAttribute('src',doc.data().snapshot);
+    yardImage.setAttribute('class',"glyphicon glyphicon-camera");
+    yardImage.setAttribute('onclick','doSomething("' + doc.data().snapshot +'");');
+    snapshot.appendChild(yardImage);
 
 
     tr.setAttribute('data-id', doc.containerno);
     containerno.textContent = doc.data().containerno;
-    source.textContent = doc.data().source;
-    snapshot.textContent = doc.data().snapshot;
+    source.textContent = doc.data().source;   
     captureDate.textContent = doc.data().captureDate;
-
+    //snapshot.textContent = doc.data().snapshot;
+ 
     tr.appendChild(containerno);
     tr.appendChild(source);
+        tr.appendChild(captureDate);
     tr.appendChild(snapshot);
-    tr.appendChild(captureDate);
 
-    containerList.prepend(tr);
+
+    if(doc.data().color == '#99FF0000')
+    {
+      containerListRed.prepend(tr);
+containerListRedCnt.textContent = parseInt(containerListRedCnt.textContent)+1;    
+    }else if(doc.data().color == '#99FFFF00'){
+      containerListOrange.prepend(tr);
+      containerListOrangeCnt.textContent = parseInt(containerListOrangeCnt.textContent)+1;    
+    }else if(doc.data().color == '#99008000'){
+      containerListGreen.prepend(tr);
+       containerListGreenCnt.textContent = parseInt(containerListGreenCnt.textContent)+1;    
+    }
+   
 
     // deleting data
     // cross.addEventListener('click', (e) => {
@@ -128,8 +215,25 @@ db.collection('scanned-containers').onSnapshot(snapshot => {
         if(change.type == 'added'){
             renderContainer(change.doc);
         } else if (change.type == 'removed'){
-            let tr = containerList.querySelector('[data-id=' + change.doc.containerno + ']');
-            containerList.removeChild(tr);
+
+
+           if(change.doc.data().color == '#99FF0000')
+    {
+       let tr = containerListRed.querySelector('[data-id=' + change.doc.containerno + ']');
+      containerListRed.removeChild(tr);
+containerListRedCnt.textContent = parseInt(containerListRedCnt.textContent)-1;    
+    }else if(change.doc.data().color == '#99FFFF00'){
+       let tr = containerListOrange.querySelector('[data-id=' + change.doc.containerno + ']');
+      containerListOrange.removeChild(tr);
+      containerListOrangeCnt.textContent = parseInt(containerListOrangeCnt.textContent)-1;    
+    }else if(change.doc.data().color == '#99008000'){
+       let tr = containerListGreen.querySelector('[data-id=' + change.doc.containerno + ']');
+      containerListGreen.removeChild(tr);
+       containerListGreenCnt.textContent = parseInt(containerListGreenCnt.textContent)-1;    
+    }
+
+            //let tr = containerList.querySelector('[data-id=' + change.doc.data().containerno + ']');
+            //containerList.removeChild(tr);
         }
     });
 });

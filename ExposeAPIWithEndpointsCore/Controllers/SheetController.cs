@@ -126,7 +126,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             }
             else if (data.sbno.Length == 0)
             {
-                return "#99FFA500";//Orange
+                return "#99FFFF00";//Orange
             }
             else
             {

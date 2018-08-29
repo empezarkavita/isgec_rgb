@@ -18,12 +18,12 @@
     <div class="row">
         <div class="col-sm-6">
             <table class="table table-bordered table-striped table-hover">
-                <caption>1A</caption>
-                <thead id="yard1A-header" style="background-color: #008000">
+                <caption><h1>YARD - 1A</h1></caption>
+                <thead id="yard1A-header" style="background-color: cadetblue">
                     <tr>
                         <th>Container No</th>
                         <th>Yard</th>
-                        <th>Capture Date</th>
+                        <th>Capture Date (GMT)</th>
                         <th>Snapshot</th>
                     </tr>
                 </thead>
@@ -34,12 +34,12 @@
         </div>
         <div class="col-sm-6">
             <table class="table table-bordered table-striped table-hover">
-                <caption>1B</caption>
-                <thead id="yard1B-header" style="background-color: #008000">
+                <caption><h1>YARD - 1B</h1></caption>
+                <thead id="yard1B-header" style="background-color: cadetblue">
                     <tr>
                         <th>Container No</th>
                         <th>Yard</th>
-                        <th>Capture Date</th>
+                        <th>Capture Date (GMT)</th>
                         <th>Snapshot</th>
                     </tr>
                 </thead>
@@ -107,7 +107,7 @@ function renderYards(doc){
     //yardcolor.textContent = doc.data().yardcolor;
     yardid.textContent = doc.data().yardid;
     captureDate.textContent = doc.data().captureDate;
-    //tr.setAttribute("style","background-color: #" + doc.data().yardcolor.slice(3));
+    yardid.setAttribute("style","background-color: #" + doc.data().yardcolor.slice(3));
 
     tr.appendChild(containerno);
     tr.appendChild(yardid);
@@ -118,11 +118,9 @@ function renderYards(doc){
 
 
     if(doc.data().yardid == '1A'){
-        yard1A.prepend(tr);
-        $('#yard1A-header').css("background-color","#" + doc.data().yardcolor.slice(3))
+        yard1A.prepend(tr);   
     }else{
         yard1B.prepend(tr);
-         $('#yard1B-header').css("background-color","#" + doc.data().yardcolor.slice(3))
     }
    
 
@@ -161,7 +159,7 @@ db.collection('yard-containers').onSnapshot(snapshot => {
         if(change.type == 'added'){
             renderYards(change.doc);
         } else if (change.type == 'removed'){
-          if(change.doc.yardid == '1A'){
+          if(change.doc.data().yardid == '1A'){
  let tr = yard1A.querySelector('[data-id=' + change.doc.containerno + ']');
             yard1A.removeChild(tr);
           }else{

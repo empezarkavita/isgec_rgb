@@ -20,7 +20,6 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         public async Task<string> PostToYardBase(string containerno, string source, string base64image)
         {
 
-
             var snapshot = "";
             var bytes = Convert.FromBase64String(base64image);
 
@@ -68,6 +67,33 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
 
 
+            // Get Color For Container 
+            var collectionReference = db.Collection("msc-mnr");
+            var query = collectionReference.Where("containerno", QueryOperator.Equal, containerno);
+            string colordoc = "";
+
+            QuerySnapshot querySnapshot = await query.SnapshotAsync();
+            foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+            {
+
+                DocumentReference docRefCon = collectionReference.Document(documentSnapshot.Id);
+                DocumentSnapshot snapshotCon = await docRefCon.SnapshotAsync();
+                if (snapshotCon.Exists)
+                {
+                    Dictionary<string, object> city = snapshotCon.ToDictionary();
+                    foreach (KeyValuePair<string, object> pair in city)
+                    {
+                        if (pair.Key == "color")
+                        {
+                            colordoc = pair.Value.ToString();
+                        }
+
+                    }
+                }
+            }
+
+            //End
+
             CollectionReference collection = db.Collection("scanned-containers");
 
             DocumentReference docRef = collection.Document(containerno + "_" + Guid.NewGuid());
@@ -77,6 +103,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 { "containerno", containerno },
                 { "source", source },
                 { "snapshot", snapshot },
+                {"color",colordoc},
                 { "captureDate",  DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")}
             };
             WriteResult writeResult = await docRef.SetAsync(container);
