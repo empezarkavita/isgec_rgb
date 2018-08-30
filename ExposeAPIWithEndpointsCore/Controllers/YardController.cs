@@ -152,7 +152,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             var appendReponse = updateRequest.Execute();
         }
 
-        private static async void InsertContainerToSheet(SheetsService service, string containerno, string yardid, string snapshot, string color)
+        private static async void InsertContainerToSheet(SheetsService service, string containerno, string yardid, string snapshot, string color,string timestamp=null)
         {
             // var range = $"{yard_sheet}!A:D";
             // var valueRange = new ValueRange();
@@ -184,7 +184,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 { "snapshot", snapshot },
                 { "yardcolor", color },
                 { "yardid", yardid },
-                { "captureDate",  captureDate} //SentinelValue.ServerTimestamp
+                { "captureDate", timestamp ?? captureDate} //SentinelValue.ServerTimestamp
             };
 
             WriteResult writeResult = await docRef.SetAsync(container);
@@ -373,9 +373,11 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         }
 
 
+
+
         [HttpPost]
         [Route("api/Yard/PostToYardBase")]
-        public async Task<string> PostToYardBase(string containerno, string yardid, string base64image)
+        public async Task<string> PostToYardBase(string containerno, string yardid, string base64image,string timestamp)
         {
 
             SheetsService service = getService();
@@ -449,7 +451,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             }
 
        
-            InsertContainerToSheet(service, containerno, yardid, snapshot, yardcolor);
+            InsertContainerToSheet(service, containerno, yardid, snapshot, yardcolor,timestamp);
 
 
             return "{'response':'Location Saved'}";
