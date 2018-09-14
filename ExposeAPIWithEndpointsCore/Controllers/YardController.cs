@@ -158,7 +158,9 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             // var valueRange = new ValueRange();
            // DateTime indianTime =  TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE);
 
-            string captureDate = DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss");
+           // string captureDate = Timestamp.GetCurrentTimestamp();
+           // FieldValue.ServerTimestamp;
+            //DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss");
             // var oblist = new List<object>() { containerno, yardid, captureDate, snapshot };
             // valueRange.Values = new List<IList<object>> { oblist };
 
@@ -178,13 +180,14 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
             DocumentReference docRef = collection.Document(containerno + "_" + Guid.NewGuid());
 
+            
             Dictionary<string, object> container = new Dictionary<string, object>
             {
                 { "containerno", containerno },
                 { "snapshot", snapshot },
                 { "yardcolor", color },
                 { "yardid", yardid },
-                { "captureDate", timestamp ?? captureDate} //SentinelValue.ServerTimestamp
+                { "captureDate", Timestamp.GetCurrentTimestamp()} //SentinelValue.ServerTimestamp
             };
 
             WriteResult writeResult = await docRef.SetAsync(container);
@@ -440,14 +443,14 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 var client = StorageClient.Create(credential);
 
                 // Create a bucket
-                string bucketName = "rgb";
+                string bucketName = "elabs";
                 // var bucket = client.CreateBucket("pin-code-recognizer", bucketName);
 
                 // Upload some files
 
                 var obj2 = client.UploadObject(bucketName, "yard/" + name, "image/jpeg", stream);
 
-                snapshot = "https://storage.cloud.google.com/rgb/yard/" + name;
+                snapshot = "https://storage.cloud.google.com/elabs/yard/" + name;
             }
 
        

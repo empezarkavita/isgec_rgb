@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace ExposeAPIWithEndpointsCore.Controllers
 {
     [Route("view/[controller]/[action]")]
@@ -9,17 +10,24 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         [HttpGet]
         public ViewResult Index()
         {
+
             return View();
         }
 
-         [HttpGet]
+        [HttpGet]
         public ViewResult Yard()
         {
             return View();
         }
 
-         [HttpGet]
-        public ViewResult Container()
+        [HttpGet]
+        public ViewResult MSC()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ViewResult ISGEC()
         {
             return View();
         }

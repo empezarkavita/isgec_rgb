@@ -1,5 +1,5 @@
 swagger: '2.0'
-host: pin-code-recognizer.appspot.com
+host: elabs-215913.appspot.com
 info:
   version: v1
   title: My API
@@ -192,17 +192,44 @@ paths:
       responses:
         '200':
           description: Success
-  /view/Firestore/Container:
+  /view/Firestore/MSC:
     get:
       tags:
         - Firestore
-      operationId: ViewFirestoreContainerGet
+      operationId: ViewFirestoreMSCGet
       consumes: []
       produces: []
       parameters: []
       responses:
         '200':
           description: Success
+  /view/Firestore/ISGEC:
+    get:
+      tags:
+        - Firestore
+      operationId: ViewFirestoreISGECGet
+      consumes: []
+      produces: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+  /mail/Gmail/Send:
+    get:
+      tags:
+        - Gmail
+      operationId: MailGmailSendGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
   /home/index:
     get:
       tags:
@@ -509,6 +536,10 @@ paths:
           required: false
           type: string
         - name: base64image
+          in: query
+          required: false
+          type: string
+        - name: timestamp
           in: query
           required: false
           type: string
