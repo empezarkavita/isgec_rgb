@@ -14,13 +14,14 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using System.Collections.Generic;
 using System;
+using Google.Apis.Http;
+using Google.Apis.Auth.OAuth2.Responses;
+using Google.Apis.Auth.OAuth2.Flows;
 
 namespace ExposeAPIWithEndpointsCore.Controllers
 {
-    [Route("mail/[controller]/[action]")]
     public class GmailController : Controller
     {
-        //public static UserCredential credential;
         public static string[] Scopes = {
             GmailService.Scope.GmailReadonly,
             GmailService.Scope.GmailSend,
@@ -28,58 +29,30 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             };
 
         [HttpGet]
+        [Route("mail/gmail/send")]
         public async Task<string> Send()
         {
-            /*Sample Json Data contains Container no and Status */
-            // var jsonstatusdata = File.ReadAllText("StatusData.json");
-            //List<ContainmentStatusData> LstatusData = JsonConvert.DeserializeObject<List<ContainmentStatusData>>(jsonstatusdata);
 
-
-            /* Read the credentials.json that is stored locally and refresh the token */
-
-            //  UserCredential credential;
-
-            // using (var stream =
-            //     new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
-            // {
-            //     string credPath = "token.json";
-            //     credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-            //         GoogleClientSecrets.Load(stream).Secrets,
-            //         Scopes,
-            //         "user",
-            //         CancellationToken.None,
-            //         new FileDataStore(credPath, true)).Result;
-            //     Console.WriteLine("Credential file saved to: " + credPath);
-            // }
-
-            UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(new ClientSecrets { ClientId = "598123410805-o68vcod1d67qnsajd1labodvlnbufgbd.apps.googleusercontent.com", ClientSecret = "35ko1a8z0rYhUK7-9r9dhiRb" },
-  new[] { "https://mail.google.com/", "https://www.googleapis.com/auth/userinfo.email" }, "user", CancellationToken.None, new FileDataStore("Analytics.Auth.Store")).Result;
-
-
-
-            // using (var stream =
-            //   new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
-            // {
-
-            //     string credPath = Directory.GetCurrentDirectory();
-            //     credPath = Path.Combine(credPath, @"credential\token.json");
-
-            //     credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-            //       GoogleClientSecrets.Load(stream).Secrets,
-            //       Scopes,
-            //       "user",
-            //       CancellationToken.None,
-            //       new FileDataStore(credPath, true)).Result;
-
-            // }
-
-            // Create Gmail API service. 
-            var service = new GmailService(new BaseClientService.Initializer()
+            var flow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
             {
-                HttpClientInitializer = credential,
-                ApplicationName = "Gmail API",
+                ClientSecrets = new ClientSecrets
+                {
+                    ClientId = "302500906167-pjt6h73de04r2b3e7vk2q3bputrnee2q.apps.googleusercontent.com",
+                    ClientSecret = "vkLz4_xD7TvBjl85mVKTqXyi"
+                },
+                Scopes = Scopes,
             });
 
+            var credential = new UserCredential(flow, Environment.UserName, new TokenResponse
+            {
+                AccessToken = "ya29.GlwXBrYPlPWOjk42DnsJNN6JB1B-eXh2af8wSpZ7wKnJnN2rbcsfR89rFLTUEsn-sVHbNeIJKFmvHuauO4K6GXOU7iXGVzzkObykFFyk1pkh612oEvC4ekHh2n9i6g",
+                RefreshToken = "1/fO2DBkA67oybjl9XG40GlkxNIUp5Lfz3zNF2McKmm6BbUDmOPNn1D73IKkFaPjQR"
+            });
+            var service = new GmailService(new BaseClientService.Initializer()
+            {
+                ApplicationName = "Gmail API",
+                HttpClientInitializer = credential
+            });
 
             var inboxlistRequest = service.Users.Messages.List("me");
             inboxlistRequest.LabelIds = "INBOX";
@@ -128,7 +101,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
                         strtextbody.Append("<table border=" + 1 + " cellpadding=" + 0 + " cellspacing=" + 0 + " width = " + 400 + "><tr bgcolor='#4da6ff'><td><b>Container No</b></td> <td> <b> Party</b> </td></tr>");
 
-                        GetAttachments(service, "me", emailInfoResponse.Id);
+                        ProcessAttachments(service, "me", emailInfoResponse.Id);
 
                         for (int i = 0; i < matches.Count; i++)
                         {
@@ -159,8 +132,10 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                         {
                             Subject = "Re: " + subject.ToString(),
                             Body = strtextbody.ToString(),
-                            From = new MailAddress("testmail21082018@gmail.com")
+                            From = new MailAddress("testmail21082018@gmail.com"),
+                            
                         };
+                        msg.ContentType = "text/html";
                         msg.To.Add(new MailAddress(from));
                         msg.ReplyTo.Add(msg.From); // Bounces without this!!
                         var msgStr = new StringWriter();
@@ -226,7 +201,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
               .Replace("=", "");
         }
 
-        private void GetAttachments(GmailService service, String userId, String messageId)
+        private void ProcessAttachments(GmailService service, String userId, String messageId)
         {
             try
             {
@@ -239,13 +214,12 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                         String attId = part.Body.AttachmentId;
                         MessagePartBody attachPart = service.Users.Messages.Attachments.Get(userId, messageId, attId).Execute();
 
-                        // Converting from RFC 4648 base64 to base64url encoding
-                        // see http://en.wikipedia.org/wiki/Base64#Implementations_and_history
                         String attachData = attachPart.Data.Replace('-', '+');
                         attachData = attachData.Replace('_', '/');
 
                         byte[] data = Convert.FromBase64String(attachData);
-                        System.IO.File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), part.Filename), data);
+                        SaveAttachments(part.Filename,data);
+                       
                     }
                 }
             }
@@ -253,6 +227,29 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             {
                 Console.WriteLine("An error occurred: " + e.Message);
             }
+        }
+
+        private void SaveAttachments(String name,byte[] data){
+
+             System.IO.File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), name), data);
+            //   GoogleCredential credential;
+            //     using (var gstream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            //     {
+            //         credential = GoogleCredential.FromStream(gstream)
+            //             .CreateScoped(StorageScope);
+            //     }
+
+            //     var client = StorageClient.Create(credential);
+
+            //     // Create a bucket
+            //     string bucketName = "elabs";
+            //     // var bucket = client.CreateBucket("pin-code-recognizer", bucketName);
+
+            //     // Upload some files
+
+            //     var obj2 = client.UploadObject(bucketName, "yard/" + name, "image/jpeg", stream);
+
+            //     snapshot = "https://storage.cloud.google.com/elabs/yard/" + name;
         }
 
     }

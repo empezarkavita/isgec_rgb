@@ -214,7 +214,7 @@ paths:
       responses:
         '200':
           description: Success
-  /mail/Gmail/Send:
+  /mail/gmail/send:
     get:
       tags:
         - Gmail
@@ -320,6 +320,22 @@ paths:
       responses:
         '200':
           description: Success
+  /api/isgec/Create:
+    get:
+      tags:
+        - IsgecFirebase
+      operationId: ApiIsgecCreateGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
   '/api/mscExcel/GetContainerDetails/{id}':
     get:
       tags:
