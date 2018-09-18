@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-sm-6">
             <table class="table table-bordered table-striped table-hover">
-                <caption><h1>YARD - 1A</h1></caption>
+                <caption><h1>YARD - 1A (<span id="yard1A_Current"></span>/<span id="yard1A_Total"></span>)</h1></caption>
                 <thead id="yard1A-header" style="background-color: cadetblue">
                     <tr>
                         <th>Container No</th>
@@ -34,7 +34,7 @@
         </div>
         <div class="col-sm-6">
             <table class="table table-bordered table-striped table-hover">
-                <caption><h1>YARD - 1B</h1></caption>
+                <caption><h1>YARD - 1B (<span id="yard1B_Current"></span>/<span id="yard1B_Total"></span>)</h1></caption>
                 <thead id="yard1B-header" style="background-color: cadetblue">
                     <tr>
                         <th>Container No</th>
@@ -152,6 +152,12 @@ function renderYards(doc){
 // });
 
 // real-time listener
+const span_1ACurrent = document.querySelector('#yard1A_Current');
+
+const span_1ATotal = document.querySelector('#yard1A_Total');
+const span_1BCurrent = document.querySelector('#yard1B_Current');
+const span_1BTotal = document.querySelector('#yard1B_Total');
+
 db.collection('yard-containers').orderBy('captureDate').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();
     changes.forEach(change => {
@@ -168,6 +174,25 @@ db.collection('yard-containers').orderBy('captureDate').onSnapshot(snapshot => {
           }
            
         }
+    });
+});
+
+
+
+db.collection('yard-capacity-demo').onSnapshot(snapshot => {
+ let changes = snapshot.docChanges();
+ changes.forEach(change => {
+       
+       if(change.doc.data().yard == '1A'){
+    span_1ACurrent.textContent = parseInt(change.doc.data().present_count);    
+    span_1ATotal.textContent = parseInt(change.doc.data().total_capacity);    
+       }else{
+     span_1BCurrent.textContent = parseInt(change.doc.data().present_count);    
+  span_1BTotal.textContent = parseInt(change.doc.data().total_capacity);    
+       }
+       
+           
+        
     });
 });
 

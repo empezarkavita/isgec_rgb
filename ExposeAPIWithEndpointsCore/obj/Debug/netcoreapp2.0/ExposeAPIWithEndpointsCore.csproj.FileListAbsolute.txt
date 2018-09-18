@@ -10,3 +10,16 @@
 /home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.dll
 /home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.pdb
 /home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/bin/Debug/netcoreapp2.0/credentials.json
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.dll
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.pdb
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/bin/Debug/netcoreapp2.0/app.yaml
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/bin/Debug/netcoreapp2.0/credentials.json
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/bin/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.deps.json
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/bin/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.runtimeconfig.json
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/bin/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.runtimeconfig.dev.json
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/bin/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.dll
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/bin/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.pdb
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.csprojAssemblyReference.cache
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.csproj.CoreCompileInputs.cache
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.AssemblyInfoInputs.cache
+/home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.AssemblyInfo.cs
