@@ -10,7 +10,14 @@
 <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase-firestore.js"></script>
 
-
+<style>
+  table, th, td {
+            border: 1px solid black;
+            width: 50px;
+            padding: 5px;
+            text-align: left;
+        }
+</style>
 
   </head>
 
@@ -27,35 +34,39 @@
              <div class="col-lg-12">
                
                 
-                <div class="jumbotron jumbotron-fluid bg-danger col-lg-3" style="background-color:#eee;text-align: center;margin-left:6%">
+                <div class="jumbotron jumbotron-fluid bg-danger col-lg-3" style="background-color:#b6d4d6;text-align: center;margin-left:6%">
+                    
                     <div class="container">
-                         <h4>20 Ft</h4>
-                        <h2 id="tb_twenty">0</h2>
-                    </div>
+                          <h2><span id="tb_twenty">0</span> (20 ft)</h2>   
+                    </div> 
           
                 </div>
 
-              <div class="jumbotron jumbotron-fluid bg-danger col-lg-3" style="background-color:#e4c7c7;text-align: center;margin-left:6%">
+              <div class="jumbotron jumbotron-fluid bg-danger col-lg-3" style="background-color:#d4cdcd;text-align: center;margin-left:6%">
                     <div class="container">
-                        <h4>40 Ft</h4>
-                        <h2 id="tb_forty">0</h2>
+                         <h2><span id="tb_forty">0</span> (40 ft)</h2>   
+                       
                     </div>
                 </div>
 
-                 <div class="jumbotron jumbotron-fluid bg-danger col-lg-3" style="background-color:#878282;text-align: center;margin-left:6%">
+                 <div class="jumbotron jumbotron-fluid bg-danger col-lg-3" style="background-color:#b6d4d6;text-align: center;margin-left:6%">
                     <div class="container">
-                           <h4>Total</h4>
-                        <h2 id="tb_total">0</h2>
+                         <h2><span id="tb_total">0</span> (Total)</h2>   
+                          
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-12">
-                <table class="table table-bordered table-striped table-hover">
 
-                    <thead>
+ 
+
+                <table class="table table-bordered table-striped table-hover" style ="width: 120%">
+
+                    <thead style="background-color: cadetblue">
                         <tr>                           
-                            <th>Container No.</th>                           
+                            <th>Container No.</th> 
+                            <th>Container Type</th>                          
                             <th>Wt</th>
                             <th>Cargo</th>
                             <th>ISO Code</th>
@@ -63,7 +74,7 @@
                             <th>Seal No 2</th>
                             <th>Seal No 3</th>
                             <th>IMDG Class</th>
-                            <th>Refer Temrature</th>
+                            <th>Refer Temprature</th>
                             <th>OOG Deatils</th>
                             <th>Container Gross Details</th>
                             <th>Cargo Description</th>
@@ -155,7 +166,7 @@ function renderContainer(doc){
         seal_no_2.textContent = doc.data().seal_no_2;
         seal_no_3.textContent = doc.data().seal_no_3;
         imdg_class.textContent = doc.data().imdg_class;
-        refer_temrature.textContent = doc.data().refer_temrature;
+    refer_temrature.textContent = doc.data().refer_temrature;
         oog_deatils.textContent = doc.data().oog_deatils;
         container_gross_details.textContent = doc.data().container_gross_details;
         cargo_description.textContent = doc.data().cargo_description;
@@ -163,6 +174,7 @@ function renderContainer(doc){
      item_no.textContent = doc.data().item_no;
         disposal_mode.textContent = doc.data().disposal_mode;
         name.textContent = doc.data().name;
+
  
         tr.appendChild(container_no);
         tr.appendChild(container_type);
@@ -172,7 +184,8 @@ function renderContainer(doc){
         tr.appendChild(seal_no_1);
         tr.appendChild(seal_no_2);
         tr.appendChild(seal_no_3);
-        tr.appendChild(refer_temrature);
+         tr.appendChild(refer_temrature);
+        tr.appendChild(imdg_class);
         tr.appendChild(oog_deatils);
         tr.appendChild(container_gross_details);
         tr.appendChild(cargo_description);
@@ -213,7 +226,7 @@ function renderContainer(doc){
 // });
 
 // real-time listener
-db.collection('enbloc-details').where("vessel_no", "==", getQueryStringValue("q")).onSnapshot(snapshot => {
+db.collection('enbloc-details').where("vessel_no", "==", getQueryStringValue("q")).orderBy('srl').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();
     changes.forEach(change => {
         console.log(change.doc.data());

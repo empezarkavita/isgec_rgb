@@ -36,6 +36,7 @@
                         <th>Vessel</th>
                         <th>Voyage</th>
                         <th>No. of Containers</th>
+                         <th>Download Excel</th>
                     </tr>
                 </thead>
                 <tbody id="enbloc-data">
@@ -88,7 +89,7 @@ function renderEnbloc(doc){
     let vessel = document.createElement('td');
     let voyage = document.createElement('td');
     let container_count = document.createElement('td');
-  
+   let excell = document.createElement('td');
 
 
     tr.setAttribute('data-id', doc.data().id);
@@ -106,6 +107,14 @@ function renderEnbloc(doc){
     voyage.textContent = doc.data().voyage;
     container_count.textContent = doc.data().container_count;
 
+     var Tagexcell = document.createElement('a');
+    Tagexcell.setAttribute('class',"glyphicon glyphicon-download-alt");
+
+    Tagexcell.setAttribute('href',doc.data().enbloc_excel);
+    Tagexcell.setAttribute('target',"_blank");    
+
+
+    excell.appendChild(Tagexcell);
 
    
 
@@ -115,6 +124,7 @@ function renderEnbloc(doc){
     tr.appendChild(vessel);
     tr.appendChild(voyage);
     tr.appendChild(container_count);
+    tr.appendChild(excell);
 
    
     enbloc.prepend(tr);  

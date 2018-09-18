@@ -85,7 +85,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                     var emailInfoRequest = service.Users.Messages.Get("me", email.Id);
                     var emailInfoResponse = emailInfoRequest.Execute();
                     var PayLoadHeader = emailInfoResponse.Payload.Headers;
-                    if (emailInfoResponse != null && PayLoadHeader.Any(mParts => mParts.Name == "Subject" && mParts.Value.Contains("Require Container Details")))
+                    if (emailInfoResponse != null && PayLoadHeader.Any(mParts => mParts.Name == "Subject" && mParts.Value.Contains("Enbloc")))
                     {
 
                         var ID = emailInfoResponse.Id;
@@ -108,35 +108,35 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
                         ProcessAttachments(service, "me", emailInfoResponse.Id);
 
-                        for (int i = 0; i < matches.Count; i++)
-                        {
-                            string party = "";
-                            string ContainerNo = matches[i].ToString();
-                            var queryMsc = mscReference.Where("containerno", QueryOperator.Equal, ContainerNo);
-                            var queryIsgec = isgecReference.Where("containerno", QueryOperator.Equal, ContainerNo);
+                        // for (int i = 0; i < matches.Count; i++)
+                        // {
+                        //     string party = "";
+                        //     string ContainerNo = matches[i].ToString();
+                        //     var queryMsc = mscReference.Where("containerno", QueryOperator.Equal, ContainerNo);
+                        //     var queryIsgec = isgecReference.Where("containerno", QueryOperator.Equal, ContainerNo);
 
-                            QuerySnapshot querySnapshotMsc = await queryMsc.SnapshotAsync();
-                            if (querySnapshotMsc.Documents.Count > 0)
-                            {
-                                party = await GetParty(querySnapshotMsc, mscReference);
-                            }
-                            else
-                            {
-                                QuerySnapshot querySnapshotIsgec = await queryIsgec.SnapshotAsync();
-                                party = await GetParty(querySnapshotIsgec, isgecReference);
+                        //     QuerySnapshot querySnapshotMsc = await queryMsc.SnapshotAsync();
+                        //     if (querySnapshotMsc.Documents.Count > 0)
+                        //     {
+                        //         party = await GetParty(querySnapshotMsc, mscReference);
+                        //     }
+                        //     else
+                        //     {
+                        //         QuerySnapshot querySnapshotIsgec = await queryIsgec.SnapshotAsync();
+                        //         party = await GetParty(querySnapshotIsgec, isgecReference);
 
-                            }
+                        //     }
 
 
-                            strtextbody.Append("<tr><td>" + ContainerNo + "</td><td> " + party + "</td> </tr>");
-                        }
+                        //     strtextbody.Append("<tr><td>" + ContainerNo + "</td><td> " + party + "</td> </tr>");
+                        // }
 
                         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                         var enc1252 = Encoding.GetEncoding(1252);
                         var msg = new AE.Net.Mail.MailMessage
                         {
                             Subject = "Re: " + subject.ToString(),
-                            Body = strtextbody.ToString(),
+                            Body = "Your Enbloc List has been processed,Please verify the same on https://elabs-215913.appspot.com/view/Firestore/Enbloc",
                             From = new MailAddress("testmail21082018@gmail.com"),
 
                         };
@@ -214,7 +214,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 IList<MessagePart> parts = message.Payload.Parts;
                 foreach (MessagePart part in parts)
                 {
-                    if (!String.IsNullOrEmpty(part.Filename))
+                    if (!String.IsNullOrEmpty(part.Filename) && part.Filename.ToLower().Contains(".xlsx"))
                     {
                         String attId = part.Body.AttachmentId;
                         MessagePartBody attachPart = service.Users.Messages.Attachments.Get(userId, messageId, attId).Execute();
@@ -265,7 +265,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 // Upload some files
 
                 var obj2 = client.UploadObject(bucketName, "enbloc/" + name, "application/vnd.ms-excel", stream);
-                return "https://storage.cloud.google.com/rgb/enbloc/" + name;
+                return "https://storage.cloud.google.com/elabs/enbloc/" + name;
             }
 
         }
@@ -333,24 +333,25 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                     {
                         Dictionary<string, object> enbloc = new Dictionary<string, object>
                         {
-                            {"srl", Convert.ToString(worksheet.Cells[row, 1].Value)},
-                            {"container_no", Convert.ToString(worksheet.Cells[row, 2].Value)},
-                            {"container_type", Convert.ToString(worksheet.Cells[row, 3].Value)},
-                            {"wt", Convert.ToString(worksheet.Cells[row, 4].Value)},
-                            {"cargo", Convert.ToString(worksheet.Cells[row, 5].Value)},
-                            {"iso_code", Convert.ToString(worksheet.Cells[row, 6].Value)},
-                            {"seal_no_1", Convert.ToString(worksheet.Cells[row, 7].Value)},
-                            {"seal_no_2", Convert.ToString(worksheet.Cells[row, 8].Value)},
-                            {"seal_no_3", Convert.ToString(worksheet.Cells[row, 9].Value)},
-                            {"imdg_class", Convert.ToString(worksheet.Cells[row, 10].Value)},
-                            {"refer_temrature", Convert.ToString(worksheet.Cells[row, 11].Value)},
-                            {"oog_deatils", Convert.ToString(worksheet.Cells[row, 12].Value)},
-                            {"container_gross_details", Convert.ToString(worksheet.Cells[row, 13].Value)},
-                            {"cargo_description", Convert.ToString(worksheet.Cells[row, 14].Value)},
-                            {"bl_number", Convert.ToString(worksheet.Cells[row, 15].Value)},
-                            {"name", Convert.ToString(worksheet.Cells[row, 16].Value)},
-                            {"item_no", Convert.ToString(worksheet.Cells[row, 17].Value)},
-                            {"disposal_mode", Convert.ToString(worksheet.Cells[row, 18].Value)},
+                            {"srl",row-7},
+                            {"srlno",Convert.ToString(worksheet.Cells[row, 1].Value).Trim()},
+                            {"container_no", Convert.ToString(worksheet.Cells[row, 2].Value).Trim()},
+                            {"container_type", Convert.ToString(worksheet.Cells[row, 3].Value).Trim()},
+                            {"wt", Convert.ToString(worksheet.Cells[row, 4].Value).Trim()},
+                            {"cargo", Convert.ToString(worksheet.Cells[row, 5].Value).Trim()},
+                            {"iso_code", Convert.ToString(worksheet.Cells[row, 6].Value).Trim()},
+                            {"seal_no_1", Convert.ToString(worksheet.Cells[row, 7].Value).Trim()},
+                            {"seal_no_2", Convert.ToString(worksheet.Cells[row, 8].Value).Trim()},
+                            {"seal_no_3", Convert.ToString(worksheet.Cells[row, 9].Value).Trim()},
+                            {"imdg_class", Convert.ToString(worksheet.Cells[row, 10].Value).Trim()},
+                            {"refer_temrature", Convert.ToString(worksheet.Cells[row, 11].Value).Trim()},
+                            {"oog_deatils", Convert.ToString(worksheet.Cells[row, 12].Value).Trim()},
+                            {"container_gross_details", Convert.ToString(worksheet.Cells[row, 13].Value).Trim()},
+                            {"cargo_description", Convert.ToString(worksheet.Cells[row, 14].Value).Trim()},
+                            {"bl_number", Convert.ToString(worksheet.Cells[row, 15].Value).Trim()},
+                            {"name", Convert.ToString(worksheet.Cells[row, 16].Value).Trim()},
+                            {"item_no", Convert.ToString(worksheet.Cells[row, 17].Value).Trim()},
+                            {"disposal_mode", Convert.ToString(worksheet.Cells[row, 18].Value).Trim()},
                             {"vessel_no", Convert.ToString(vesselno)}
 
                         };
