@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExposeAPIWithEndpointsCore.Controllers
 {
-    [Route("view/[controller]")]
+    [Route("view/[controller]/[action]")]
     public class AngularController : Controller
     {
 

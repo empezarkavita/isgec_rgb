@@ -14,16 +14,17 @@
     <PackageReference Include="Google.Cloud.Storage.V1" Version="*"/>
     <PackageReference Include="FireSharp.Serialization.JsonNet" Version="*"/>
     <PackageReference Include="Google.Cloud.Firestore" Version="1.0.0-beta01"/>
-        <PackageReference Include="AE.Net.Mail" Version="1.7.10.0" />
-    <PackageReference Include="Google.Apis.Gmail.v1" Version="1.35.1.1328" />
+    <PackageReference Include="AE.Net.Mail" Version="1.7.10.0"/>
+    <PackageReference Include="Google.Apis.Gmail.v1" Version="1.35.1.1328"/>
+    <PackageReference Include="EPPlus.Core" Version="*"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.yaml" CopyToOutputDirectory="Always"/>
     <None Update="client_secret.json" CopyToOutputDirectory="Always"/>
     <None Update="capacity_client_secret.json" CopyToOutputDirectory="Always"/>
     <None Update="output.json" CopyToOutputDirectory="Always"/>
-    <None Update="firestore_client_secret.json" CopyToOutputDirectory="Always"/>   
-    <None Update="resources" CopyToOutputDirectory="Always"/>    
+    <None Update="firestore_client_secret.json" CopyToOutputDirectory="Always"/>
+    <None Update="resources" CopyToOutputDirectory="Always"/>
     <None Include="credentials.json" CopyToOutputDirectory="Always"/>
   </ItemGroup>
   <ItemGroup>

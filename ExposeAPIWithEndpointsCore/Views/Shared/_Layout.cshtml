@@ -130,6 +130,11 @@ function doSomething(img)
     modalImg.src = document.getElementById(img).getAttribute("src");
   //  captionText.innerHTML = this.alt;
 }
+
+function getQueryStringValue (key) {  
+  return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));  
+}  
+
 // $("#myImg").click(function(){
 //      modal.style.display = "block";
 //     modalImg.src = this.src;

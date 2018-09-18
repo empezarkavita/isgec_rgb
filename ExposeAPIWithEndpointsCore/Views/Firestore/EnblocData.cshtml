@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://www.gstatic.com/firebasejs/5.0.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.0.3/firebase-firestore.js"></script>
+
+
+
+  </head>
+
+ 
+
+    <body>
+
+
+    <div class="container-fluid">
+        <br/>
+        <br/>
+
+        <div class="row">
+             <div class="col-lg-12">
+               
+                
+                <div class="jumbotron jumbotron-fluid bg-danger col-lg-3" style="background-color:#eee;text-align: center;margin-left:6%">
+                    <div class="container">
+                         <h4>20 Ft</h4>
+                        <h2 id="tb_twenty">0</h2>
+                    </div>
+          
+                </div>
+
+              <div class="jumbotron jumbotron-fluid bg-danger col-lg-3" style="background-color:#e4c7c7;text-align: center;margin-left:6%">
+                    <div class="container">
+                        <h4>40 Ft</h4>
+                        <h2 id="tb_forty">0</h2>
+                    </div>
+                </div>
+
+                 <div class="jumbotron jumbotron-fluid bg-danger col-lg-3" style="background-color:#878282;text-align: center;margin-left:6%">
+                    <div class="container">
+                           <h4>Total</h4>
+                        <h2 id="tb_total">0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <table class="table table-bordered table-striped table-hover">
+
+                    <thead>
+                        <tr>                           
+                            <th>Container No.</th>                           
+                            <th>Wt</th>
+                            <th>Cargo</th>
+                            <th>ISO Code</th>
+                            <th>Seal No 1</th>
+                            <th>Seal No 2</th>
+                            <th>Seal No 3</th>
+                            <th>IMDG Class</th>
+                            <th>Refer Temrature</th>
+                            <th>OOG Deatils</th>
+                            <th>Container Gross Details</th>
+                            <th>Cargo Description</th>
+                            <th>BL Number</th>                           
+                            <th>Item No</th>
+                            <th>Disposal Mode</th>                           
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb_vessel">
+                       
+                    </tbody>
+                </table>
+            </div>           
+        </div>
+      
+    </div>
+    <br />
+    <br />
+
+
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+
+   <script>
+        // Initialize Firebase
+
+         var config = {
+    apiKey: "AIzaSyB1lb1ILTcp6pNz25RLJfP7rdgoE0HUOgI",
+    authDomain: "rgbfirestore.firebaseapp.com",
+    databaseURL: "https://rgbfirestore.firebaseio.com",
+    projectId: "rgbfirestore",
+    storageBucket: "",
+    messagingSenderId: "270745970969"
+  };
+
+        firebase.initializeApp(config);
+        const db = firebase.firestore();
+        db.settings({ timestampsInSnapshots: true }); 
+
+
+
+    </script>
+    <script>
+const tb_vessel = document.querySelector('#tb_vessel');
+
+const tb_total = document.querySelector('#tb_total');
+const tb_twenty = document.querySelector('#tb_twenty');
+const tb_forty = document.querySelector('#tb_forty');
+
+
+// create element & render cafe
+function renderContainer(doc){
+
+    let tr = document.createElement('tr');
+
+       let container_no = document.createElement('td');
+       let container_type = document.createElement('td');
+       let wt = document.createElement('td');
+       let cargo = document.createElement('td');
+       let iso_code = document.createElement('td');
+       let seal_no_1 = document.createElement('td');
+       let seal_no_2 = document.createElement('td');
+       let seal_no_3 = document.createElement('td');
+       let imdg_class = document.createElement('td');
+       let refer_temrature = document.createElement('td');
+       let oog_deatils = document.createElement('td');
+       let container_gross_details = document.createElement('td');
+       let cargo_description = document.createElement('td');
+       let bl_number = document.createElement('td');
+       let item_no = document.createElement('td');
+       let disposal_mode = document.createElement('td');
+ let name = document.createElement('td');
+
+
+
+        tr.setAttribute('data-id', doc.data().id);
+
+    
+    
+        container_no.textContent = doc.data().container_no;
+        container_type.textContent = doc.data().container_type;
+        wt.textContent = doc.data().wt;
+        cargo.textContent = doc.data().cargo;
+        iso_code.textContent = doc.data().iso_code;
+        seal_no_1.textContent = doc.data().seal_no_1;
+        seal_no_2.textContent = doc.data().seal_no_2;
+        seal_no_3.textContent = doc.data().seal_no_3;
+        imdg_class.textContent = doc.data().imdg_class;
+        refer_temrature.textContent = doc.data().refer_temrature;
+        oog_deatils.textContent = doc.data().oog_deatils;
+        container_gross_details.textContent = doc.data().container_gross_details;
+        cargo_description.textContent = doc.data().cargo_description;
+        bl_number.textContent = doc.data().bl_number;
+     item_no.textContent = doc.data().item_no;
+        disposal_mode.textContent = doc.data().disposal_mode;
+        name.textContent = doc.data().name;
+ 
+        tr.appendChild(container_no);
+        tr.appendChild(container_type);
+        tr.appendChild(wt);
+        tr.appendChild(cargo);
+        tr.appendChild(iso_code);
+        tr.appendChild(seal_no_1);
+        tr.appendChild(seal_no_2);
+        tr.appendChild(seal_no_3);
+        tr.appendChild(refer_temrature);
+        tr.appendChild(oog_deatils);
+        tr.appendChild(container_gross_details);
+        tr.appendChild(cargo_description);
+        tr.appendChild(bl_number);       
+        tr.appendChild(item_no);
+        tr.appendChild(disposal_mode);
+        tr.appendChild(name);
+
+        tb_vessel.prepend(tr);  
+
+
+    if(doc.data().container_type.substring(0,2) == '40')
+    {
+      tb_forty.textContent = parseInt(tb_forty.textContent)+1;    
+    }else if(doc.data().container_type.substring(0,2) == '20'){     
+        tb_twenty.textContent = parseInt(tb_twenty.textContent)+1;    
+    }
+   
+    tb_total.textContent = parseInt(tb_total.textContent)+1;    
+}
+
+// getting data
+// db.collection('scanned-containers').orderBy('captureDate').get().then(snapshot => {
+//     snapshot.docs.forEach(doc => {
+//         renderContainer(doc);
+//     });
+// });
+
+// saving data
+// form.addEventListener('submit', (e) => {
+//     e.preventDefault();
+//     db.collection('yard-containers').add({
+//         name: form.name.value,
+//         city: form.city.value
+//     });
+//     form.name.value = '';
+//     form.city.value = '';
+// });
+
+// real-time listener
+db.collection('enbloc-details').where("vessel_no", "==", getQueryStringValue("q")).onSnapshot(snapshot => {
+    let changes = snapshot.docChanges();
+    changes.forEach(change => {
+        console.log(change.doc.data());
+        if(change.type == 'added'){
+            renderContainer(change.doc);
+        } else if (change.type == 'removed'){
+
+            let tr = containerListRed.querySelector('[data-id=' + change.doc.data().id + ']');
+            tb_vessel.removeChild(tr);
+                if(change.doc.data().container_type.substring(0,2) == '40')
+                {
+                    tb_forty.textContent = parseInt(tb_forty.textContent)-1;    
+                }
+                else if(change.doc.data().container_type.substring(0,2) == '20'){     
+                    tb_twenty.textContent = parseInt(tb_twenty.textContent)-1;    
+                }
+        }
+    });
+});
+
+    </script>
+</html>

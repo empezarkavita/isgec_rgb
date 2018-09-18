@@ -80,12 +80,12 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 DocumentSnapshot snapshotCon = await docRefCon.SnapshotAsync();
                 if (snapshotCon.Exists)
                 {
-                    Dictionary<string, object> city = snapshotCon.ToDictionary();
-                    foreach (KeyValuePair<string, object> pair in city)
+                    Dictionary<string, object> containers = snapshotCon.ToDictionary();
+                    foreach (KeyValuePair<string, object> data in containers)
                     {
-                        if (pair.Key == "color")
+                        if (data.Key == "color")
                         {
-                            colordoc = pair.Value.ToString();
+                            colordoc = data.Value.ToString();
                         }
 
                     }

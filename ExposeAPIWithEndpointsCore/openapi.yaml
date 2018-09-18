@@ -4,11 +4,11 @@ info:
   version: v1
   title: My API
 paths:
-  /view/Angular:
+  /view/Angular/Index:
     get:
       tags:
         - Angular
-      operationId: ViewAngularGet
+      operationId: ViewAngularIndexGet
       consumes: []
       produces: []
       parameters: []
@@ -165,6 +165,62 @@ paths:
         - application/json
         - text/json
       parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  /api/enbloc/PostToYardBase:
+    post:
+      tags:
+        - Enbloc
+      operationId: ApiEnblocPostToYardBasePost
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: containerno
+          in: query
+          required: false
+          type: string
+        - name: vesselno
+          in: query
+          required: false
+          type: string
+        - name: yardid
+          in: query
+          required: false
+          type: string
+        - name: base64image
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+  '/api/enbloc/GetYardDetails/{containerno}/{userName}':
+    get:
+      tags:
+        - Enbloc
+      operationId: ApiEnblocGetYardDetailsByContainernoByUserNameGet
+      consumes: []
+      produces:
+        - text/plain
+        - application/json
+        - text/json
+      parameters:
+        - name: containerno
+          in: path
+          required: true
+          type: string
+        - name: userName
+          in: path
+          required: true
+          type: string
       responses:
         '200':
           description: Success
@@ -484,49 +540,17 @@ paths:
           description: Success
           schema:
             type: string
-  '/api/Yard/SendToYard/{containerno}/{yardid}':
+  /api/yard/Create:
     get:
       tags:
         - Yard
-      operationId: ApiYardSendToYardByContainernoByYardidGet
+      operationId: ApiYardCreateGet
       consumes: []
       produces:
         - text/plain
         - application/json
         - text/json
-      parameters:
-        - name: containerno
-          in: path
-          required: true
-          type: string
-        - name: yardid
-          in: path
-          required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-          schema:
-            type: string
-  /api/Yard/PostToYard:
-    post:
-      tags:
-        - Yard
-      operationId: ApiYardPostToYardPost
-      consumes: []
-      produces:
-        - text/plain
-        - application/json
-        - text/json
-      parameters:
-        - name: containerno
-          in: query
-          required: false
-          type: string
-        - name: yardid
-          in: query
-          required: false
-          type: string
+      parameters: []
       responses:
         '200':
           description: Success

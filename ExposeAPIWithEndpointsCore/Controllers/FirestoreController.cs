@@ -32,5 +32,18 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ViewResult Enbloc()
+        {
+            return View();
+        }
+
+
+        [HttpGet]
+        public ViewResult EnblocData()
+        {
+            return View();
+        }
+
     }
 }

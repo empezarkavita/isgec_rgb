@@ -53,10 +53,11 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         // GET api/values/5
         [HttpGet]
         [Route("api/Yard/GetYardDetails/{id}")]
-        public string GetYardDetails(string id)
+        public async Task<string> GetYardDetails(string id)
         {
-            SheetsService service = getService();
-            var yardCapacity = getYardCapacity(service);
+
+            YardCapacity yardCapacity = await getYardCapacity();
+
             string yardAcolor = getYardColor(yardCapacity.yardA);
             string yardBcolor = getYardColor(yardCapacity.yardB);
             string location = "";
@@ -97,104 +98,52 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             return yarddetails;
         }
 
-
         [HttpGet]
-        [Route("api/Yard/SendToYard/{containerno}/{yardid}")]
-        public string SendToYard(string containerno, string yardid)
+        [Route("api/yard/Create")]
+        public string Create()
         {
-
-            SheetsService service = getService();
-
-            var yardCapacity = getYardCapacity(service);
-
-
-            var count = 0;
-            var cell = "";
-
-            if (yardid == "1A")
-            {
-                if (yardCapacity.yardA >= 100)
-                {
-                    return "{'response':'YARD 1A CAPACITY IS FULL'}";
-                }
-                count = yardCapacity.yardA + 1;
-                cell = "B2";
-
-            }
-            else
-            {
-                if (yardCapacity.yardB >= 100)
-                {
-                    return "{'response':'YARD 1B CAPACITY IS FULL'}";
-                }
-                count = yardCapacity.yardB + 1;
-                cell = "B3";
-
-            }
-
-            UpdateCapacityToSheet(service, count, cell);
-            InsertContainerToSheet(service, containerno, yardid, "", "");
-            // service.Dispose();
-
-            return "{'response':'Location Saved'}";
+            return InsertYard().Result;
         }
 
-        private static void UpdateCapacityToSheet(SheetsService service, int count, string cell)
+        private async Task<string> InsertYard()
         {
-            var range = $"{sheet}!" + cell;
-            var valueRange = new ValueRange();
+            IList<IList<object>> values = readYardListExcel();
 
-            var oblist = new List<object>() { count };
-            valueRange.Values = new List<IList<object>> { oblist };
 
-            var updateRequest = service.Spreadsheets.Values.Update(valueRange, SpreadsheetId, range);
-            updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
-            var appendReponse = updateRequest.Execute();
-        }
-
-        private static async void InsertContainerToSheet(SheetsService service, string containerno, string yardid, string snapshot, string color,string timestamp=null)
-        {
-            // var range = $"{yard_sheet}!A:D";
-            // var valueRange = new ValueRange();
-           // DateTime indianTime =  TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE);
-
-           // string captureDate = Timestamp.GetCurrentTimestamp();
-           // FieldValue.ServerTimestamp;
-            //DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss");
-            // var oblist = new List<object>() { containerno, yardid, captureDate, snapshot };
-            // valueRange.Values = new List<IList<object>> { oblist };
-
-            // var appendRequest = service.Spreadsheets.Values.Append(valueRange, SpreadsheetId, range);
-            // appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-            // var appendReponse = appendRequest.Execute();
 
             var gcpCredentaialPath = "firestore_client_secret.json";
-                        System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", gcpCredentaialPath);
-           
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", gcpCredentaialPath);
+
             var gcpCredential = GoogleCredential.GetApplicationDefault();
 
 
             FirestoreDb db = FirestoreDb.Create("rgbfirestore");
 
-            CollectionReference collection = db.Collection("yard-containers");
+            CollectionReference collection = db.Collection("yard-capacity-demo");
 
-            DocumentReference docRef = collection.Document(containerno + "_" + Guid.NewGuid());
 
-            
-            Dictionary<string, object> container = new Dictionary<string, object>
+            if (values != null && values.Count > 0)
             {
-                { "containerno", containerno },
-                { "snapshot", snapshot },
-                { "yardcolor", color },
-                { "yardid", yardid },
-                { "captureDate", Timestamp.GetCurrentTimestamp()} //SentinelValue.ServerTimestamp
-            };
+                foreach (var row in values)
+                {
+                    if (row[0].ToString().Length == 2)
+                    {
+                        DocumentReference docRef = collection.Document(row[0].ToString().ToUpper());
+                        int count = Convert.ToInt16(row[1]);
+                        Dictionary<FieldPath, object> eInfo = new Dictionary<FieldPath, object>
+                    {
+                    {  new FieldPath("present_count"), count},
+                    {  new FieldPath("present_color"), getYardColor(count) }
+                    };
+                        WriteResult writeResult = await docRef.UpdateAsync(eInfo);
+                    }
 
-            WriteResult writeResult = await docRef.SetAsync(container);
-
+                }
+            }
+            return "Data Saved Successfully";
         }
 
-        private SheetsService getService()
+        private IList<IList<object>> readYardListExcel()
         {
             SheetsService service;
             GoogleCredential credential;
@@ -210,31 +159,175 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 ApplicationName = ApplicationName,
             });
 
-            return service;
-
-        }
-
-        private YardCapacity getYardCapacity(SheetsService service)
-        {
-
             var range = $"{sheet}!A:C";
             SpreadsheetsResource.ValuesResource.GetRequest request =
                     service.Spreadsheets.Values.Get(SpreadsheetId, range);
 
-            var response = request.Execute();
+            ValueRange response = request.Execute();
 
-            YardCapacity yardCapacity = new YardCapacity();
-
-            IList<IList<object>> values = response.Values;
-
-            if (values != null && values.Count > 0)
-            {
-                yardCapacity.yardA = Convert.ToInt32(values[1][1].ToString());
-                yardCapacity.yardB = Convert.ToInt32(values[2][1].ToString());
-            }
-
-            return yardCapacity;
+            return response.Values;
         }
+
+
+        // [HttpGet]
+        // [Route("api/Yard/SendToYard/{containerno}/{yardid}")]
+        // public string SendToYard(string containerno, string yardid)
+        // {
+
+        //     SheetsService service = getService();
+
+        //     var yardCapacity = getYardCapacity(service);
+
+
+        //     var count = 0;
+        //     var cell = "";
+
+        //     if (yardid == "1A")
+        //     {
+        //         if (yardCapacity.yardA >= 100)
+        //         {
+        //             return "{'response':'YARD 1A CAPACITY IS FULL'}";
+        //         }
+        //         count = yardCapacity.yardA + 1;
+        //         cell = "B2";
+
+        //     }
+        //     else
+        //     {
+        //         if (yardCapacity.yardB >= 100)
+        //         {
+        //             return "{'response':'YARD 1B CAPACITY IS FULL'}";
+        //         }
+        //         count = yardCapacity.yardB + 1;
+        //         cell = "B3";
+
+        //     }
+
+        //     UpdateCapacityToSheet(service, count, cell);
+        //     InsertContainerToSheet(service, containerno, yardid, "", "");
+        //     // service.Dispose();
+
+        //     return "{'response':'Location Saved'}";
+        // }
+
+        private async Task<string> UpdateCapacityToSheet(int count, string yard, string color)
+        {
+            var gcpCredentaialPath = "firestore_client_secret.json";
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", gcpCredentaialPath);
+
+            var gcpCredential = GoogleCredential.GetApplicationDefault();
+
+
+            FirestoreDb db = FirestoreDb.Create("rgbfirestore");
+
+
+            CollectionReference collection = db.Collection("yard-capacity-demo");
+            DocumentReference docRef = collection.Document(yard);
+
+
+            Dictionary<FieldPath, object> eInfo = new Dictionary<FieldPath, object>
+                {
+                {  new FieldPath("present_count"), count },
+                {  new FieldPath("present_color"), color }
+                };
+            WriteResult writeResult = await docRef.UpdateAsync(eInfo);
+
+            return "";
+
+            // var range = $"{sheet}!" + cell;
+            // var valueRange = new ValueRange();
+
+            // var oblist = new List<object>() { count };
+            // valueRange.Values = new List<IList<object>> { oblist };
+
+            // var updateRequest = service.Spreadsheets.Values.Update(valueRange, SpreadsheetId, range);
+            // updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
+            // var appendReponse = updateRequest.Execute();
+        }
+
+        private static async void InsertContainerToSheet(string containerno, string yardid, string snapshot, string color, string timestamp = null)
+        {
+            // var range = $"{yard_sheet}!A:D";
+            // var valueRange = new ValueRange();
+            // DateTime indianTime =  TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE);
+
+            // string captureDate = Timestamp.GetCurrentTimestamp();
+            // FieldValue.ServerTimestamp;
+            //DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss");
+            // var oblist = new List<object>() { containerno, yardid, captureDate, snapshot };
+            // valueRange.Values = new List<IList<object>> { oblist };
+
+            // var appendRequest = service.Spreadsheets.Values.Append(valueRange, SpreadsheetId, range);
+            // appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
+            // var appendReponse = appendRequest.Execute();
+
+            var gcpCredentaialPath = "firestore_client_secret.json";
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", gcpCredentaialPath);
+
+            var gcpCredential = GoogleCredential.GetApplicationDefault();
+
+
+            FirestoreDb db = FirestoreDb.Create("rgbfirestore");
+
+            CollectionReference collection = db.Collection("yard-containers");
+
+            DocumentReference docRef = collection.Document(containerno + "_" + Guid.NewGuid());
+
+
+            Dictionary<string, object> container = new Dictionary<string, object>
+            {
+                { "containerno", containerno },
+                { "snapshot", snapshot },
+                { "yardcolor", color },
+                { "yardid", yardid },
+                { "captureDate", Timestamp.GetCurrentTimestamp()} //SentinelValue.ServerTimestamp
+            };
+
+            WriteResult writeResult = await docRef.SetAsync(container);
+
+        }
+
+        // private SheetsService getService()
+        // {
+        //     SheetsService service;
+        //     GoogleCredential credential;
+        //     using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+        //     {
+        //         credential = GoogleCredential.FromStream(stream)
+        //             .CreateScoped(Scopes);
+        //     }
+
+        //     service = new SheetsService(new BaseClientService.Initializer()
+        //     {
+        //         HttpClientInitializer = credential,
+        //         ApplicationName = ApplicationName,
+        //     });
+
+        //     return service;
+
+        // }
+
+        // private YardCapacity getYardCapacity(SheetsService service)
+        // {
+
+        //     var range = $"{sheet}!A:C";
+        //     SpreadsheetsResource.ValuesResource.GetRequest request =
+        //             service.Spreadsheets.Values.Get(SpreadsheetId, range);
+
+        //     var response = request.Execute();
+
+        //     YardCapacity yardCapacity = new YardCapacity();
+
+        //     IList<IList<object>> values = response.Values;
+
+        //     if (values != null && values.Count > 0)
+        //     {
+        //         yardCapacity.yardA = Convert.ToInt32(values[1][1].ToString());
+        //         yardCapacity.yardB = Convert.ToInt32(values[2][1].ToString());
+        //     }
+
+        //     return yardCapacity;
+        // }
 
         private string getYardColor(int presentCapacity)
         {
@@ -296,51 +389,51 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
         // }
 
-        [HttpPost]
-        [Route("api/Yard/PostToYard")]
-        public string PostToYard(string containerno, string yardid)
-        {
+        // [HttpPost]
+        // [Route("api/Yard/PostToYard")]
+        // public string PostToYard(string containerno, string yardid)
+        // {
 
-            SheetsService service = getService();
+        //     SheetsService service = getService();
 
-            var yardCapacity = getYardCapacity(service);
+        //     var yardCapacity = getYardCapacity(service);
 
-            string yardcolor = yardid == "1A" ? getYardColor(yardCapacity.yardA) : getYardColor(yardCapacity.yardB);
-
-
-            var count = 0;
-            var cell = "";
-
-            if (yardid == "1A")
-            {
-                if (yardCapacity.yardA >= 100)
-                {
-                    return "{'response':'YARD 1A CAPACITY IS FULL'}";
-                }
-                count = yardCapacity.yardA + 1;
-                cell = "B2";
-
-            }
-            else
-            {
-                if (yardCapacity.yardB >= 100)
-                {
-                    return "{'response':'YARD 1B CAPACITY IS FULL'}";
-                }
-                count = yardCapacity.yardB + 1;
-                cell = "B3";
-
-            }
-
-            var file = Request.Form.Files[0];
-            UpdateCapacityToSheet(service, count, cell);
-
-            string snapshot = UploadAndGetSnapshotUrl(file, containerno);
-            InsertContainerToSheet(service, containerno, yardid, snapshot, yardcolor);
+        //     string yardcolor = yardid == "1A" ? getYardColor(yardCapacity.yardA) : getYardColor(yardCapacity.yardB);
 
 
-            return "{'response':'Location Saved'}";
-        }
+        //     var count = 0;
+        //     var cell = "";
+
+        //     if (yardid == "1A")
+        //     {
+        //         if (yardCapacity.yardA >= 100)
+        //         {
+        //             return "{'response':'YARD 1A CAPACITY IS FULL'}";
+        //         }
+        //         count = yardCapacity.yardA + 1;
+        //         cell = "B2";
+
+        //     }
+        //     else
+        //     {
+        //         if (yardCapacity.yardB >= 100)
+        //         {
+        //             return "{'response':'YARD 1B CAPACITY IS FULL'}";
+        //         }
+        //         count = yardCapacity.yardB + 1;
+        //         cell = "B3";
+
+        //     }
+
+        //     var file = Request.Form.Files[0];
+        //     UpdateCapacityToSheet(service, count, cell);
+
+        //     string snapshot = UploadAndGetSnapshotUrl(file, containerno);
+        //     InsertContainerToSheet(service, containerno, yardid, snapshot, yardcolor);
+
+
+        //     return "{'response':'Location Saved'}";
+        // }
 
         private string UploadAndGetSnapshotUrl(IFormFile file, string containerno)
         {
@@ -380,18 +473,16 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
         [HttpPost]
         [Route("api/Yard/PostToYardBase")]
-        public async Task<string> PostToYardBase(string containerno, string yardid, string base64image,string timestamp)
+        public async Task<string> PostToYardBase(string containerno, string yardid, string base64image, string timestamp)
         {
 
-            SheetsService service = getService();
-
-            var yardCapacity = getYardCapacity(service);
+            YardCapacity yardCapacity = await getYardCapacity();
 
             string yardcolor = yardid == "1A" ? getYardColor(yardCapacity.yardA) : getYardColor(yardCapacity.yardB);
 
 
             var count = 0;
-            var cell = "";
+
 
             if (yardid == "1A")
             {
@@ -400,7 +491,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                     return "{'response':'YARD 1A CAPACITY IS FULL'}";
                 }
                 count = yardCapacity.yardA + 1;
-                cell = "B2";
+
 
             }
             else
@@ -410,20 +501,20 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                     return "{'response':'YARD 1B CAPACITY IS FULL'}";
                 }
                 count = yardCapacity.yardB + 1;
-                cell = "B3";
+
 
             }
 
 
-            UpdateCapacityToSheet(service, count, cell);
+            await UpdateCapacityToSheet(count, yardid, yardcolor);
             var snapshot = "";
             var bytes = Convert.FromBase64String(base64image);
 
             if (bytes.Length <= 0)
                 return "error";
 
-            Random random = new Random();  
-            string name = random.Next(0, 1000).ToString()+"_"+containerno + ".jpg";
+            Random random = new Random();
+            string name = random.Next(0, 1000).ToString() + "_" + containerno + ".jpg";
             var path = Path.Combine(
                         Directory.GetCurrentDirectory(), "wwwroot",
                         name);
@@ -453,11 +544,53 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 snapshot = "https://storage.cloud.google.com/elabs/yard/" + name;
             }
 
-       
-            InsertContainerToSheet(service, containerno, yardid, snapshot, yardcolor,timestamp);
+
+            InsertContainerToSheet(containerno, yardid, snapshot, yardcolor, timestamp);
 
 
             return "{'response':'Location Saved'}";
+        }
+
+
+        private async Task<YardCapacity> getYardCapacity()
+        {
+            var gcpCredentaialPatha = "firestore_client_secret.json";
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", gcpCredentaialPatha);
+            var gcpCredential = GoogleCredential.GetApplicationDefault();
+            FirestoreDb db = FirestoreDb.Create("rgbfirestore");
+
+
+            YardCapacity objYard = new YardCapacity();
+
+            var collectionReference = db.Collection("yard-capacity-demo");
+            QuerySnapshot querySnapshot = await collectionReference.SnapshotAsync();
+
+            foreach (DocumentSnapshot document in querySnapshot.Documents)
+            {
+                DocumentReference doc = collectionReference.Document(document.Id);
+                DocumentSnapshot snapshotCon = await doc.SnapshotAsync();
+
+                if (snapshotCon.Exists)
+                {
+                    YardCapacityDemo yard = new YardCapacityDemo();
+                    yard = snapshotCon.Deserialize<YardCapacityDemo>();
+                    if (yard.yard == "1A")
+                    {
+                        objYard.yardA = yard.present_count;
+                    }
+                    else
+                    {
+                        objYard.yardB = yard.present_count;
+                    }
+
+                }
+
+
+            }
+
+
+            return objYard;
+
         }
 
     }

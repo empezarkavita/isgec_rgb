@@ -17,6 +17,9 @@ using System;
 using Google.Apis.Http;
 using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Storage.v1;
+using Google.Cloud.Storage.V1;
+using OfficeOpenXml;
 
 namespace ExposeAPIWithEndpointsCore.Controllers
 {
@@ -27,6 +30,8 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             GmailService.Scope.GmailSend,
             GmailService.Scope.GmailCompose
             };
+
+        static readonly string[] StorageScope = { StorageService.Scope.DevstorageReadWrite };
 
         [HttpGet]
         [Route("mail/gmail/send")]
@@ -133,7 +138,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                             Subject = "Re: " + subject.ToString(),
                             Body = strtextbody.ToString(),
                             From = new MailAddress("testmail21082018@gmail.com"),
-                            
+
                         };
                         msg.ContentType = "text/html";
                         msg.To.Add(new MailAddress(from));
@@ -218,8 +223,11 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                         attachData = attachData.Replace('_', '/');
 
                         byte[] data = Convert.FromBase64String(attachData);
-                        SaveAttachments(part.Filename,data);
-                       
+                        string fileName = Guid.NewGuid() + "_" + part.Filename;
+                        string cloudUrl = SaveAttachments(fileName, data);
+
+                        PostToFirebase(fileName, cloudUrl);
+
                     }
                 }
             }
@@ -229,28 +237,153 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             }
         }
 
-        private void SaveAttachments(String name,byte[] data){
+        private string SaveAttachments(String name, byte[] data)
+        {
 
-             System.IO.File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), name), data);
-            //   GoogleCredential credential;
-            //     using (var gstream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
-            //     {
-            //         credential = GoogleCredential.FromStream(gstream)
-            //             .CreateScoped(StorageScope);
-            //     }
+            var path = Path.Combine(
+                         Directory.GetCurrentDirectory(), "wwwroot",
+                         name);
 
-            //     var client = StorageClient.Create(credential);
+            // System.IO.File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), name), data);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                stream.Write(data, 0, data.Length);
+                stream.Flush();
+                GoogleCredential credential;
+                using (var gstream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+                {
+                    credential = GoogleCredential.FromStream(gstream)
+                        .CreateScoped(StorageScope);
+                }
 
-            //     // Create a bucket
-            //     string bucketName = "elabs";
-            //     // var bucket = client.CreateBucket("pin-code-recognizer", bucketName);
+                var client = StorageClient.Create(credential);
 
-            //     // Upload some files
+                // Create a bucket
+                string bucketName = "elabs";
+                // var bucket = client.CreateBucket("pin-code-recognizer", bucketName);
 
-            //     var obj2 = client.UploadObject(bucketName, "yard/" + name, "image/jpeg", stream);
+                // Upload some files
 
-            //     snapshot = "https://storage.cloud.google.com/elabs/yard/" + name;
+                var obj2 = client.UploadObject(bucketName, "enbloc/" + name, "application/vnd.ms-excel", stream);
+                return "https://storage.cloud.google.com/rgb/enbloc/" + name;
+            }
+
         }
+
+        // private void PostToFirebase(string fileName)
+        // {
+
+        //     var path = Path.Combine(
+        //                 Directory.GetCurrentDirectory(), "wwwroot",
+        //                 fileName);
+
+        //     var excel = new ExcelQueryFactory(path);
+
+        //     var indianaCompanies = from c in excel.WorksheetNoHeader()//Selects data within the B3 to G10 cell range
+        //                            select c;
+
+        //     indianaCompanies = indianaCompanies;
+        // }
+
+        private static async void PostToFirebase(string fileName, string cloudUrl)
+        {
+            string pathToExcelFile = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot",
+                        fileName);
+
+
+
+            var gcpCredentaialPath = "firestore_client_secret.json";
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", gcpCredentaialPath);
+
+            var gcpCredential = GoogleCredential.GetApplicationDefault();
+
+
+            FirestoreDb db = FirestoreDb.Create("rgbfirestore");
+
+
+
+            // string sheetName = "Sheet1";
+
+            FileInfo file = new FileInfo(pathToExcelFile);
+            /// overwrite old file
+
+            List<Enbloc> enblocs = new List<Enbloc>();
+
+            using (ExcelPackage package = new ExcelPackage(file))
+            {
+
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                int rowCount = worksheet.Dimension.Rows;
+                int ColCount = worksheet.Dimension.Columns;
+
+                string document_date = Convert.ToString(worksheet.Cells["C1"].Value);
+                string vessel = Convert.ToString(worksheet.Cells["B4"].Value);
+                string voyage = Convert.ToString(worksheet.Cells["D4"].Value);
+                string agent_name = Convert.ToString(worksheet.Cells["B5"].Value);
+                string via_no = Convert.ToString(worksheet.Cells["D5"].Value);
+
+                string vesselno = vessel.Split(' ').ToList().Aggregate((x, y) => x.Trim() + y.Trim()) + voyage.ToString();
+
+                int count = 0;
+                CollectionReference collection = db.Collection("enbloc-details");
+                for (int row = 8; row <= rowCount; row++)
+                {
+                    if (Convert.ToString(worksheet.Cells[row, 1].Value).Trim() != "")
+                    {
+                        Dictionary<string, object> enbloc = new Dictionary<string, object>
+                        {
+                            {"srl", Convert.ToString(worksheet.Cells[row, 1].Value)},
+                            {"container_no", Convert.ToString(worksheet.Cells[row, 2].Value)},
+                            {"container_type", Convert.ToString(worksheet.Cells[row, 3].Value)},
+                            {"wt", Convert.ToString(worksheet.Cells[row, 4].Value)},
+                            {"cargo", Convert.ToString(worksheet.Cells[row, 5].Value)},
+                            {"iso_code", Convert.ToString(worksheet.Cells[row, 6].Value)},
+                            {"seal_no_1", Convert.ToString(worksheet.Cells[row, 7].Value)},
+                            {"seal_no_2", Convert.ToString(worksheet.Cells[row, 8].Value)},
+                            {"seal_no_3", Convert.ToString(worksheet.Cells[row, 9].Value)},
+                            {"imdg_class", Convert.ToString(worksheet.Cells[row, 10].Value)},
+                            {"refer_temrature", Convert.ToString(worksheet.Cells[row, 11].Value)},
+                            {"oog_deatils", Convert.ToString(worksheet.Cells[row, 12].Value)},
+                            {"container_gross_details", Convert.ToString(worksheet.Cells[row, 13].Value)},
+                            {"cargo_description", Convert.ToString(worksheet.Cells[row, 14].Value)},
+                            {"bl_number", Convert.ToString(worksheet.Cells[row, 15].Value)},
+                            {"name", Convert.ToString(worksheet.Cells[row, 16].Value)},
+                            {"item_no", Convert.ToString(worksheet.Cells[row, 17].Value)},
+                            {"disposal_mode", Convert.ToString(worksheet.Cells[row, 18].Value)},
+                            {"vessel_no", Convert.ToString(vesselno)}
+
+                        };
+                        count++;
+                        DocumentReference docRef1 = collection.Document(vesselno + "||" + Convert.ToString(worksheet.Cells[row, 2].Value));
+                        WriteResult writeResult1 = await docRef1.SetAsync(enbloc);
+                    }
+                }
+
+
+                collection = db.Collection("enbloc");
+                DocumentReference docRef = collection.Document(vesselno);
+                Dictionary<string, object> vesselInfo = new Dictionary<string, object>
+                {
+                    { "guid", Guid.NewGuid().ToString() },
+                    { "agent_name", agent_name },
+                    { "container_count", count},
+                    { "created_date", Timestamp.GetCurrentTimestamp() },
+                    { "document_date", document_date },
+                    { "enbloc_excel", cloudUrl },
+                    { "vessel", vessel },
+                    { "via_no", via_no },
+                    { "voyage", voyage },
+                    { "vessel_no", vesselno }
+                };
+                WriteResult writeResult = await docRef.SetAsync(vesselInfo);
+
+            }
+        }
+
+
+      
+
 
     }
 }

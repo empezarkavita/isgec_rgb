@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	    <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase-firestore.js"></script>
+
+    <style>
+      table, th, td {
+            border: 1px solid black;
+            width: 15%;
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
+
+  </head>
+  <body>
+
+
+
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered table-striped table-hover">
+                <caption><h1>ENBLOC</h1></caption>
+                <thead id="enbloc-header" style="background-color: cadetblue">
+                    <tr>
+                        <th>Agent Name</th>
+                        <th>Created Date</th>
+                        <th>Document Date</th>
+                        <th>Vessel</th>
+                        <th>Voyage</th>
+                        <th>No. of Containers</th>
+                    </tr>
+                </thead>
+                <tbody id="enbloc-data">
+                    
+                </tbody>
+            </table>
+        </div>
+       
+    </div>
+</div>
+
+
+
+
+
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+
+   <script>
+        // Initialize Firebase
+
+         var config = {
+            apiKey: "AIzaSyB1lb1ILTcp6pNz25RLJfP7rdgoE0HUOgI",
+            authDomain: "rgbfirestore.firebaseapp.com",
+            databaseURL: "https://rgbfirestore.firebaseio.com",
+            projectId: "rgbfirestore",
+            storavesselgeBucket: "",
+            messagingSenderId: "270745970969"
+        };
+
+        firebase.initializeApp(config);
+        const db = firebase.firestore();
+        db.settings({ timestampsInSnapshots: true }); 
+    </script>
+    <script>
+    const enbloc = document.querySelector('#enbloc-data');
+
+
+
+// create element & render cafe
+function renderEnbloc(doc){
+    let tr = document.createElement('tr');
+
+
+    let agent_name = document.createElement('td');
+    let created_date = document.createElement('td');
+    let document_date = document.createElement('td');
+    let vessel = document.createElement('td');
+    let voyage = document.createElement('td');
+    let container_count = document.createElement('td');
+  
+
+
+    tr.setAttribute('data-id', doc.data().id);
+
+    var aTag = document.createElement('a');
+
+    aTag.setAttribute('href',"EnblocData?q="+doc.data().vessel_no);
+    aTag.setAttribute('target',"_blank");
+    aTag.innerHTML = doc.data().agent_name;
+      
+    agent_name.appendChild(aTag);
+    created_date.textContent = doc.data().created_date.toDate().toShortFormat();
+    document_date.textContent = doc.data().document_date;
+    vessel.textContent = doc.data().vessel;
+    voyage.textContent = doc.data().voyage;
+    container_count.textContent = doc.data().container_count;
+
+
+   
+
+    tr.appendChild(agent_name);
+    tr.appendChild(created_date);
+    tr.appendChild(document_date);
+    tr.appendChild(vessel);
+    tr.appendChild(voyage);
+    tr.appendChild(container_count);
+
+   
+    enbloc.prepend(tr);  
+
+
+}
+
+
+
+db.collection('enbloc').orderBy('created_date').onSnapshot(snapshot => {
+    let changes = snapshot.docChanges();
+    changes.forEach(change => {
+
+        if(change.type == 'added'){
+            renderEnbloc(change.doc);
+        } else if (change.type == 'removed'){
+         
+ let tr = enbloc.querySelector('[data-id=' + change.doc.data().id + ']');
+            enbloc.removeChild(tr);    
+        }
+    });
+});
+
+// updating records (console demo)
+// db.collection('cafes').doc('DOgwUvtEQbjZohQNIeMr').update({
+//     name: 'mario world'
+// });
+
+// db.collection('cafes').doc('DOgwUvtEQbjZohQNIeMr').update({
+//     city: 'hong kong'
+// });
+
+// setting data
+// db.collection('cafes').doc('DOgwUvtEQbjZohQNIeMr').set({
+//     city: 'hong kong'
+// });
+    </script>
+</html>
