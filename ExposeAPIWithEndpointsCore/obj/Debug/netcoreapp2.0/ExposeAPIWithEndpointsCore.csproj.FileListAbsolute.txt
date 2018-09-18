@@ -23,3 +23,4 @@
 /home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.csproj.CoreCompileInputs.cache
 /home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.AssemblyInfoInputs.cache
 /home/kavita/RGB/RGB-Backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.AssemblyInfo.cs
+/home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/obj/Debug/netcoreapp2.0/ExposeAPIWithEndpointsCore.csprojResolveAssemblyReference.cache
