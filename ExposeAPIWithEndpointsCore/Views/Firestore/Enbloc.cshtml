@@ -30,13 +30,14 @@
                 <caption><h1>ENBLOCS</h1></caption>
                 <thead id="enbloc-header" style="background-color: cadetblue">
                     <tr>
-                        <th>Agent Name</th>
-                        <th>Created Date</th>
-                        <th>Document Date</th>
+                        <th>Transaction No.</th>
                         <th>Vessel</th>
                         <th>Voyage</th>
+                        <th>Agent Name</th>
+                        <!-- <th>Document Date</th> -->
                         <th>No. of Containers</th>
-                         <th>Download Excel</th>
+                        <th>Upload Date</th>
+                        <th>Download Excel</th>
                     </tr>
                 </thead>
                 <tbody id="enbloc-data">
@@ -82,10 +83,10 @@
 function renderEnbloc(doc){
     let tr = document.createElement('tr');
 
-
+let tran_no = document.createElement('td');
     let agent_name = document.createElement('td');
     let created_date = document.createElement('td');
-    let document_date = document.createElement('td');
+    // let document_date = document.createElement('td');
     let vessel = document.createElement('td');
     let voyage = document.createElement('td');
     let container_count = document.createElement('td');
@@ -98,13 +99,16 @@ function renderEnbloc(doc){
 
     aTag.setAttribute('href',"EnblocData?q="+doc.data().vessel_no);
     aTag.setAttribute('target',"_blank");
-    aTag.innerHTML = doc.data().agent_name;
+    aTag.innerHTML = doc.data().vessel_no;
       
-    agent_name.appendChild(aTag);
+    tran_no.appendChild(aTag);
+
     created_date.textContent = doc.data().created_date.toDate().toShortFormat();
-    document_date.textContent = doc.data().document_date;
+    agent_name.textContent = doc.data().agent_name;
+    // document_date.textContent = doc.data().document_date;
     vessel.textContent = doc.data().vessel;
     voyage.textContent = doc.data().voyage;
+   
     container_count.textContent = doc.data().container_count;
 
      var Tagexcell = document.createElement('a');
@@ -116,15 +120,14 @@ function renderEnbloc(doc){
 
     excell.appendChild(Tagexcell);
 
-   
-
-    tr.appendChild(agent_name);
-    tr.appendChild(created_date);
-    tr.appendChild(document_date);
-    tr.appendChild(vessel);
-    tr.appendChild(voyage);
-    tr.appendChild(container_count);
-    tr.appendChild(excell);
+    tr.appendChild(tran_no);
+        tr.appendChild(vessel);
+        tr.appendChild(voyage);
+        tr.appendChild(agent_name);
+        // tr.appendChild(document_date);
+        tr.appendChild(container_count);
+        tr.appendChild(created_date);
+        tr.appendChild(excell);
 
    
     enbloc.prepend(tr);  
