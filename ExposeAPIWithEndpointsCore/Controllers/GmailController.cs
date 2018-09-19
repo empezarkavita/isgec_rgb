@@ -156,6 +156,10 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                             Raw = Base64UrlEncode(msgStr.ToString())
                         }, "me").Execute();
 
+                        var markAsReadRequest = new ModifyThreadRequest {RemoveLabelIds = new[] {"UNREAD"}};
+                            await service.Users.Threads.Modify(markAsReadRequest, "me", ID)
+                                    .ExecuteAsync();
+
 
                     }
                 }
