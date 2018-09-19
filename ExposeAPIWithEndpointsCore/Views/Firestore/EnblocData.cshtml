@@ -20,6 +20,18 @@
             padding: 5px;
             text-align: left;
         }
+
+        .jumbotron-custom{
+            padding-right:0px;
+            padding-left:0px;
+            padding-top:15px;
+            padding-bottom:15px;
+        }
+
+        .jumbotron-body{
+            font-size:50px;
+            color: #514141;
+        }
     </style>
 
 </head>
@@ -38,28 +50,32 @@
 
                 <table class="table table-bordered table-striped table-hover" style="width: 120%">
                     <caption>
-                        <div class="col-lg-2">
-                            <h1 style="margin-top: 20%">Enbloc Details</h1>
+                        <div class="col-lg-2" style="margin-left: 3%">
+                            <span style="margin-top: 10%;">
+                            <h1>Enbloc Details</h1>
+                            <h4>(<span id="lbl_vessel_no"></span>)</h4>
+                            </span>
+
                         </div>
 
 
-                        <div class="jumbotron jumbotron-fluid bg-danger col-lg-2" style="background-color:#b6d4d6;text-align: center;margin-left:6%">
+                        <div class="jumbotron jumbotron-fluid bg-danger col-lg-2 jumbotron-custom" style="background-color:#b6d4d6;text-align: center;margin-left:6%">
                             <div class="container-fluid">
-                                <h2><span id="tb_twenty">0</span> (20 ft)</h2>
+                                <h2><span id="tb_twenty" class="jumbotron-body">0</span> (20 ft)</h2>
                             </div>
 
                         </div>
 
-                        <div class="jumbotron jumbotron-fluid bg-danger col-lg-2" style="background-color:#d4cdcd;text-align: center;margin-left:6%">
+                        <div class="jumbotron jumbotron-fluid bg-danger col-lg-2 jumbotron-custom" style="background-color:#d4cdcd;text-align: center;margin-left:6%">
                             <div class="container">
-                                <h2><span id="tb_forty">0</span> (40 ft)</h2>
+                                <h2><span id="tb_forty" class="jumbotron-body">0</span> (40 ft)</h2>
 
                             </div>
                         </div>
 
-                        <div class="jumbotron jumbotron-fluid bg-danger col-lg-2" style="background-color:#b6d4d6;text-align: center;margin-left:6%">
+                        <div class="jumbotron jumbotron-fluid bg-danger col-lg-2 jumbotron-custom" style="background-color:#b6d4d6;text-align: center;margin-left:6%">
                             <div class="container">
-                                <h2><span id="tb_total">0</span> (Total)</h2>
+                                <h2><span id="tb_total" class="jumbotron-body">0</span> (Total)</h2>
 
                             </div>
                         </div>
@@ -129,7 +145,7 @@
     const tb_total = document.querySelector('#tb_total');
     const tb_twenty = document.querySelector('#tb_twenty');
     const tb_forty = document.querySelector('#tb_forty');
-
+    const lbl_vessel_no = document.querySelector('#lbl_vessel_no');
 
     // create element & render cafe
     function renderContainer(doc) {
@@ -231,6 +247,7 @@
     // });
 
     // real-time listener
+    lbl_vessel_no.textContent = getQueryStringValue("q");
     db.collection('enbloc-details').where("vessel_no", "==", getQueryStringValue("q")).orderBy('srl','desc').onSnapshot(snapshot => {
         let changes = snapshot.docChanges();
         changes.forEach(change => {
