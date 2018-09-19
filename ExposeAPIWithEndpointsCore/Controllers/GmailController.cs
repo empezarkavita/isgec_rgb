@@ -107,7 +107,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
                         strtextbody.Append("<table border=" + 1 + " cellpadding=" + 0 + " cellspacing=" + 0 + " width = " + 400 + "><tr bgcolor='#4da6ff'><td><b>Container No</b></td> <td> <b> Party</b> </td></tr>");
 
-                        ProcessAttachments(service, "me", emailInfoResponse.Id);
+                       string vesselno = await ProcessAttachments(service, "me", emailInfoResponse.Id);
 
                         // for (int i = 0; i < matches.Count; i++)
                         // {
@@ -138,7 +138,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                         {
                             Subject = "Re: " + subject.ToString(),
                             
-                            Body ="Your Enbloc has been processed by Empezar's Bot Technology. <br>To check live status,please click on the below link.<br> http://elabs-215913.appspot.com/view/Firestore/Enbloc <br><br><br>Thank You.",
+                            Body ="Your Enbloc has been processed by Empezar's Bot Technology.<br>Transaction No. for the same is :"+ vesselno + "<br><br>To check live status,please click on the below link.<br> http://elabs-215913.appspot.com/view/Firestore/Enbloc <br><br><br>Thank You.",
                             
                             From = new MailAddress("empezar.systems@gmail.com"),
 
@@ -213,8 +213,9 @@ namespace ExposeAPIWithEndpointsCore.Controllers
               .Replace("=", "");
         }
 
-        private void ProcessAttachments(GmailService service, String userId, String messageId)
+        private async Task<string> ProcessAttachments(GmailService service, String userId, String messageId)
         {
+            string vesselno ="";
             try
             {
                 Message message = service.Users.Messages.Get(userId, messageId).Execute();
@@ -233,8 +234,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                         string fileName = Guid.NewGuid() + "_" + part.Filename;
                         string cloudUrl = SaveAttachments(fileName, data);
 
-                        PostToFirebase(fileName, cloudUrl);
-
+                        vesselno = await PostToFirebase(fileName, cloudUrl);
                     }
                 }
             }
@@ -242,6 +242,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             {
                 Console.WriteLine("An error occurred: " + e.Message);
             }
+            return vesselno;
         }
 
         private string SaveAttachments(String name, byte[] data)
@@ -292,7 +293,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         //     indianaCompanies = indianaCompanies;
         // }
 
-        private static async void PostToFirebase(string fileName, string cloudUrl)
+        private static async Task<string> PostToFirebase(string fileName, string cloudUrl)
         {
             string pathToExcelFile = Path.Combine(
                         Directory.GetCurrentDirectory(), "wwwroot",
@@ -386,6 +387,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 };
                 WriteResult writeResult = await docRef.SetAsync(vesselInfo);
 
+                return vesselno;
             }
         }
 
