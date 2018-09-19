@@ -138,7 +138,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                         {
                             Subject = "Re: " + subject.ToString(),
                             
-                            Body ="Your Enbloc has been processed by Empezar's Bot Technology.<br>Transaction No. for the same is :"+ vesselno + "<br><br>To check live status,please click on the below link.<br> http://elabs-215913.appspot.com/view/Firestore/Enbloc <br><br><br>Thank You.",
+                            Body ="Your Enbloc has been processed by <b>Empezar's Bot Technology</b>.<br /><br />Transaction Number for the same is :  " + vesselno + "<br /><br />To check live status,please click on the below link.<br /> http://elabs-215913.appspot.com/view/Firestore/Enbloc <br /><br /><br />Thank You.",
                             
                             From = new MailAddress("empezar.systems@gmail.com"),
 

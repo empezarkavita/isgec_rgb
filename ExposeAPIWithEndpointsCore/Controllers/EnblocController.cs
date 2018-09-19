@@ -293,9 +293,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 
                 if (snapshotCon.Exists)
                 {
-                    yard = snapshotCon.Deserialize<Yard>();
-                   
-                   
+                    yard = snapshotCon.Deserialize<Yard>();    
                 }              
             }
             return yard;
