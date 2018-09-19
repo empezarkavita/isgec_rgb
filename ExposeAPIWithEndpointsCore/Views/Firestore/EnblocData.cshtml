@@ -66,6 +66,7 @@
                     </caption>
                     <thead style="background-color: cadetblue">
                         <tr>
+                            <th>Srl</th>
                             <th>Container No.</th>
                             <th>Container Type</th>
                             <th>Wt</th>
@@ -135,6 +136,7 @@
 
         let tr = document.createElement('tr');
 
+        let srlno = document.createElement('td');
         let container_no = document.createElement('td');
         let container_type = document.createElement('td');
         let wt = document.createElement('td');
@@ -158,7 +160,7 @@
         tr.setAttribute('data-id', doc.data().id);
 
 
-
+        srlno.textContent = doc.data().srlno;
         container_no.textContent = doc.data().container_no;
         container_type.textContent = doc.data().container_type;
         wt.textContent = doc.data().wt;
@@ -178,6 +180,7 @@
         name.textContent = doc.data().name;
 
 
+        tr.appendChild(srlno);
         tr.appendChild(container_no);
         tr.appendChild(container_type);
         tr.appendChild(wt);
@@ -228,7 +231,7 @@
     // });
 
     // real-time listener
-    db.collection('enbloc-details').where("vessel_no", "==", getQueryStringValue("q")).orderBy('srl').onSnapshot(snapshot => {
+    db.collection('enbloc-details').where("vessel_no", "==", getQueryStringValue("q")).orderBy('srl','desc').onSnapshot(snapshot => {
         let changes = snapshot.docChanges();
         changes.forEach(change => {
             console.log(change.doc.data());
