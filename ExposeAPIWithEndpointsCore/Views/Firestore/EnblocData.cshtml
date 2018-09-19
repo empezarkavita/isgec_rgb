@@ -41,28 +41,28 @@
                         <div class="col-lg-2">
                             <h1 style="margin-top: 20%">Enbloc Details</h1>
                         </div>
-                                
 
-                                <div class="jumbotron jumbotron-fluid bg-danger col-lg-2" style="background-color:#b6d4d6;text-align: center;margin-left:6%">
-                                    <div class="container-fluid"> 
-                                        <h2><span id="tb_twenty">0</span> (20 ft)</h2>
-                                    </div>
 
-                                </div>
-                          
-                                <div class="jumbotron jumbotron-fluid bg-danger col-lg-2" style="background-color:#d4cdcd;text-align: center;margin-left:6%">
-                                    <div class="container">
-                                        <h2><span id="tb_forty">0</span> (40 ft)</h2>
+                        <div class="jumbotron jumbotron-fluid bg-danger col-lg-2" style="background-color:#b6d4d6;text-align: center;margin-left:6%">
+                            <div class="container-fluid">
+                                <h2><span id="tb_twenty">0</span> (20 ft)</h2>
+                            </div>
 
-                                    </div>
-                                </div>
-                        
-                                <div class="jumbotron jumbotron-fluid bg-danger col-lg-2" style="background-color:#b6d4d6;text-align: center;margin-left:6%">
-                                    <div class="container">
-                                        <h2><span id="tb_total">0</span> (Total)</h2>
+                        </div>
 
-                                    </div>
-                                </div>
+                        <div class="jumbotron jumbotron-fluid bg-danger col-lg-2" style="background-color:#d4cdcd;text-align: center;margin-left:6%">
+                            <div class="container">
+                                <h2><span id="tb_forty">0</span> (40 ft)</h2>
+
+                            </div>
+                        </div>
+
+                        <div class="jumbotron jumbotron-fluid bg-danger col-lg-2" style="background-color:#b6d4d6;text-align: center;margin-left:6%">
+                            <div class="container">
+                                <h2><span id="tb_total">0</span> (Total)</h2>
+
+                            </div>
+                        </div>
                     </caption>
                     <thead style="background-color: cadetblue">
                         <tr>
@@ -80,9 +80,10 @@
                             <th>Container Gross Details</th>
                             <th>Cargo Description</th>
                             <th>BL Number</th>
+                            <th>Name</th>
                             <th>Item No</th>
                             <th>Disposal Mode</th>
-                            <th>Name</th>
+
                         </tr>
                     </thead>
                     <tbody id="tb_vessel">
@@ -191,9 +192,10 @@
         tr.appendChild(container_gross_details);
         tr.appendChild(cargo_description);
         tr.appendChild(bl_number);
+        tr.appendChild(name);
         tr.appendChild(item_no);
         tr.appendChild(disposal_mode);
-        tr.appendChild(name);
+
 
         tb_vessel.prepend(tr);
 
