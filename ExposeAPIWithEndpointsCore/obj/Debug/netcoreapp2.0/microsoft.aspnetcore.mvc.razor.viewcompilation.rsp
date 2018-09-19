@@ -3,6 +3,8 @@
 --application-name=ExposeAPIWithEndpointsCore
 --content-root=/home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore
 --file=/home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/Views/Angular/Index.cshtml
+--file=/home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/Views/Firestore/Enbloc.cshtml
+--file=/home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/Views/Firestore/EnblocData.cshtml
 --file=/home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/Views/Firestore/Index.cshtml
 --file=/home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/Views/Firestore/ISGEC.cshtml
 --file=/home/kavita/EM/rgb-backend/demo/isgec_rgb/ExposeAPIWithEndpointsCore/Views/Firestore/MSC.cshtml

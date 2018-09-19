@@ -270,6 +270,28 @@ paths:
       responses:
         '200':
           description: Success
+  /view/Firestore/Enbloc:
+    get:
+      tags:
+        - Firestore
+      operationId: ViewFirestoreEnblocGet
+      consumes: []
+      produces: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+  /view/Firestore/EnblocData:
+    get:
+      tags:
+        - Firestore
+      operationId: ViewFirestoreEnblocDataGet
+      consumes: []
+      produces: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
   /mail/gmail/send:
     get:
       tags:

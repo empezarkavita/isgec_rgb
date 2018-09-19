@@ -1,4 +1,4 @@
 cron:
 - description: "mailer job"
   url: /mail/gmail/send
-  schedule: every 1 mins
+  schedule: every 2 mins

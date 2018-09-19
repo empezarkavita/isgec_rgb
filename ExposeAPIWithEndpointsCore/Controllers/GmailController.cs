@@ -42,16 +42,17 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             {
                 ClientSecrets = new ClientSecrets
                 {
-                    ClientId = "302500906167-pjt6h73de04r2b3e7vk2q3bputrnee2q.apps.googleusercontent.com",
-                    ClientSecret = "vkLz4_xD7TvBjl85mVKTqXyi"
+                    ClientId = "146633937037-7a4hfiqn3sp0lfbts5k0h3tb9h3ipv9c.apps.googleusercontent.com",
+                    ClientSecret = "IGniQmnUKRADxoZQh0jqWQFa"
                 },
                 Scopes = Scopes,
             });
 
+          
             var credential = new UserCredential(flow, Environment.UserName, new TokenResponse
             {
-                AccessToken = "ya29.GlwXBrYPlPWOjk42DnsJNN6JB1B-eXh2af8wSpZ7wKnJnN2rbcsfR89rFLTUEsn-sVHbNeIJKFmvHuauO4K6GXOU7iXGVzzkObykFFyk1pkh612oEvC4ekHh2n9i6g",
-                RefreshToken = "1/fO2DBkA67oybjl9XG40GlkxNIUp5Lfz3zNF2McKmm6BbUDmOPNn1D73IKkFaPjQR"
+                AccessToken = "ya29.GlsdBk2fqEeCmMBkjceYNSJ0Ee8SMIkqa1trjC7cgkjdkpBi0xA6kKEqNI8_iTuX9wXXqt7LTTtJFW6S8EzNk0izPthAfL4JL3mTC1hjQDpUDFaMZRoX9Q9yZ1Af",
+                RefreshToken = "1/dRAhSp6zDZHEuc3GASJHYUtRhOTvQ0RxpgoLBgTkifEe-i53zmoEOLRT7owe0rk5"
             });
             var service = new GmailService(new BaseClientService.Initializer()
             {
@@ -136,8 +137,10 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                         var msg = new AE.Net.Mail.MailMessage
                         {
                             Subject = "Re: " + subject.ToString(),
-                            Body = "Your Enbloc List has been processed,Please verify the same on https://elabs-215913.appspot.com/view/Firestore/Enbloc",
-                            From = new MailAddress("testmail21082018@gmail.com"),
+                            
+                            Body ="Your Enbloc has been processed by Empezar's Bot Technology. <br>To check live status,please click on the below link.<br> http://elabs-215913.appspot.com/view/Firestore/Enbloc <br><br><br>Thank You.",
+                            
+                            From = new MailAddress("empezar.systems@gmail.com"),
 
                         };
                         msg.ContentType = "text/html";
