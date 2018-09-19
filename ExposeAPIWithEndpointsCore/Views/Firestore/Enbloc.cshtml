@@ -93,7 +93,7 @@ let tran_no = document.createElement('td');
    let excell = document.createElement('td');
 
 
-    tr.setAttribute('data-id', doc.data().id);
+    tr.setAttribute('data-id', doc.id);
 
     var aTag = document.createElement('a');
 
@@ -145,7 +145,7 @@ db.collection('enbloc').orderBy('created_date').onSnapshot(snapshot => {
             renderEnbloc(change.doc);
         } else if (change.type == 'removed'){
          
- let tr = enbloc.querySelector('[data-id=' + change.doc.data().id + ']');
+ let tr = enbloc.querySelector('[data-id=' + change.doc.id + ']');
             enbloc.removeChild(tr);    
         }
     });

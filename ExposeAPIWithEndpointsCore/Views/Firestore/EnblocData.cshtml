@@ -173,7 +173,7 @@
 
 
 
-        tr.setAttribute('data-id', doc.data().id);
+        tr.setAttribute('data-id', doc.id);
 
 
         srlno.textContent = doc.data().srlno;
@@ -256,7 +256,7 @@
                 renderContainer(change.doc);
             } else if (change.type == 'removed') {
 
-                let tr = containerListRed.querySelector('[data-id=' + change.doc.data().id + ']');
+                let tr = containerListRed.querySelector('[data-id=' + change.doc.id + ']');
                 tb_vessel.removeChild(tr);
                 if (change.doc.data().container_type.substring(0, 2) == '40') {
                     tb_forty.textContent = parseInt(tb_forty.textContent) - 1;

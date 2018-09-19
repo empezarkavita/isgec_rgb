@@ -93,14 +93,14 @@ function renderYards(doc){
    snapshot.setAttribute("style","text-align: center");
    
     let yardImage = document.createElement('span');
-    yardImage.setAttribute('id',doc.data().id);
+    yardImage.setAttribute('id',doc.id);
     yardImage.setAttribute('src',doc.data().snapshot);
     yardImage.setAttribute('class',"glyphicon glyphicon-camera");
-    yardImage.setAttribute('onclick','doSomething("' + doc.data().id +'");');
+    yardImage.setAttribute('onclick','doSomething("' + doc.id +'");');
     snapshot.appendChild(yardImage);
 
 
-    tr.setAttribute('data-id', doc.data().id);
+    tr.setAttribute('data-id', doc.id);
    // tr.setAttribute('class', doc.data().yardcolor == '#99FF0000' ? '#FF0000' : (doc.data().yardcolor == '#FFFF00' ? 'warning' : '#008000') );
     containerno.textContent = doc.data().containerno;
     //snapshot.textContent = doc.data().snapshot;
@@ -166,10 +166,10 @@ db.collection('yard-containers').orderBy('captureDate').onSnapshot(snapshot => {
             renderYards(change.doc);
         } else if (change.type == 'removed'){
           if(change.doc.data().yardid == '1A'){
- let tr = yard1A.querySelector('[data-id=' + change.doc.data().id + ']');
+ let tr = yard1A.querySelector('[data-id=' + change.doc.id + ']');
             yard1A.removeChild(tr);
           }else{
- let tr = yard1B.querySelector('[data-id=' + change.doc.data().id + ']');
+ let tr = yard1B.querySelector('[data-id=' + change.doc.id + ']');
             yard1B.removeChild(tr);
           }
            
