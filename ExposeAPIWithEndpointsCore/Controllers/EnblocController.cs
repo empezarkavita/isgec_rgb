@@ -163,7 +163,14 @@ namespace ExposeAPIWithEndpointsCore.Controllers
             
             List<Yard> yards =  await GetYardDetails(db,userName);
             string count = enbloc_count.container_enbloced.ToString() + "/" + enbloc_count.container_count.ToString();
-            string location = "Vessel : " + vessel_no;
+            string location ="";
+            if(enbloc_count.container_count == 0){
+                 location = "Enbloc not present";
+                 yards.ForEach(x => x.disabled = true);
+            }else{
+                location = "Vessel : " + vessel_no;
+            }
+          
             string yarddetails = "{\"location\":\"" + location + "\",\"vessel\":\"" + vessel_no + "\",\"count\":\"" + count +  "\",\"yards\":" + JsonConvert.SerializeObject(yards) + "}";
 
             return yarddetails;

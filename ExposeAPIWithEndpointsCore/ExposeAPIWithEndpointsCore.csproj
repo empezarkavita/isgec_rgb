@@ -22,9 +22,7 @@
     <None Include="app.yaml" CopyToOutputDirectory="Always"/>
     <None Update="client_secret.json" CopyToOutputDirectory="Always"/>
     <None Update="capacity_client_secret.json" CopyToOutputDirectory="Always"/>
-    <None Update="output.json" CopyToOutputDirectory="Always"/>
     <None Update="firestore_client_secret.json" CopyToOutputDirectory="Always"/>
-    <None Update="resources" CopyToOutputDirectory="Always"/>
     <None Include="credentials.json" CopyToOutputDirectory="Always"/>
   </ItemGroup>
   <ItemGroup>

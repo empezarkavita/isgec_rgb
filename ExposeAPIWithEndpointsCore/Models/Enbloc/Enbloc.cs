@@ -38,6 +38,8 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         public int present_count { get; set; }
         [FirestoreProperty]
         public string present_color { get; set; }
+          [FirestoreProperty]
+        public bool disabled { get; set; }
 
 
 
