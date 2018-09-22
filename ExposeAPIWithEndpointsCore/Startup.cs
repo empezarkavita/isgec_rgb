@@ -11,8 +11,10 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using ExposeAPIWithEndpointsCore.Models;
 using System.IO;
-
-
+using System.Data.Common;
+using System.Data;
+using MySql.Data.MySqlClient;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ExposeAPIWithEndpointsCore
 {
@@ -30,7 +32,7 @@ namespace ExposeAPIWithEndpointsCore
         {
             services.AddMvc();
 
-            services.Add(new ServiceDescriptor(typeof(ContainerContext), new ContainerContext(Configuration.GetConnectionString("IsgecDb"))));
+          //  services.Add(new ServiceDescriptor(typeof(ContainerContext), new ContainerContext(Configuration.GetConnectionString("IsgecDb"))));
 
             services.AddSwaggerGen(c =>
             {
@@ -39,6 +41,46 @@ namespace ExposeAPIWithEndpointsCore
                     new Info { Title = "My API", Version = "v1" });
             });
 
+            services.AddSingleton(typeof(DbConnection), (IServiceProvider) =>
+            InitializeDatabase());
+
+            // services.AddDbContext<IronManContext>(options =>
+            // options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+
+
+        }
+
+        DbConnection InitializeDatabase()
+        {
+            DbConnection connection;
+            connection = NewMysqlConnection();
+            connection.Open();
+            using (var createTableCommand = connection.CreateCommand())
+            {
+                createTableCommand.CommandText = @"
+                    CREATE TABLE IF NOT EXISTS
+                    visits (
+                        time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        user_ip CHAR(64)
+                    )";
+                createTableCommand.ExecuteNonQuery();
+            }
+            return connection;
+        }
+
+        DbConnection NewMysqlConnection()
+        {
+            // [START gae_flex_mysql_env]
+            var connectionString = new MySqlConnectionStringBuilder(
+                Configuration["CloudSql:ConnectionString"])
+            {
+                // Connecting to a local proxy that does not support ssl.
+                SslMode = MySqlSslMode.None,
+            };
+            DbConnection connection =
+                new MySqlConnection(connectionString.ConnectionString);
+            // [END gae_flex_mysql_env]
+            return connection;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

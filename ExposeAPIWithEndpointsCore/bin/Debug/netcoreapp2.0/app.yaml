@@ -9,3 +9,5 @@ resources:
 endpoints_api_service:
   name: elabs-215913.appspot.com
   rollout_strategy: managed
+beta_settings:
+    cloud_sql_instances: "elabs-215913:asia-south1:eslabs=tcp:5432"
