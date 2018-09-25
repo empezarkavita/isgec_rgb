@@ -1,17 +1,21 @@
+using ExposeAPIWithEndpointsCore.eslabs;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ExposeAPIWithEndpointsCore.Controllers
 {
     [Route("view/[controller]/[action]")]
     public class FirestoreController : Controller
     {
-        private readonly DbConnection _connection;
-        public FirestoreController(DbConnection connection)
+
+        private readonly eslabsContext _context;
+
+        public FirestoreController(eslabsContext context)
         {
-            this._connection = connection;
+            _context = context;
         }
 
 
@@ -19,13 +23,25 @@ namespace ExposeAPIWithEndpointsCore.Controllers
         public async Task<ViewResult> Index()
         {
 
-           using (var insertVisitCommand = _connection.CreateCommand())
-            {
-                insertVisitCommand.CommandText =
-                    @"INSERT INTO visits (user_ip) values (123)";
-               
-                await insertVisitCommand.ExecuteNonQueryAsync();
-            }
+            int Id = _context.TblEnbloc.Count();
+
+
+            TblEnbloc tbl = new TblEnbloc();
+            tbl.Id = Id + 1;
+            tbl.Name = "Sajid";
+            _context.Add(tbl);
+            await _context.SaveChangesAsync();
+
+
+            //   var enbloc =  await _context.Enbloc.ToListAsync();
+
+            //    using (var insertVisitCommand = _connection.CreateCommand())
+            //     {
+            //         insertVisitCommand.CommandText =
+            //             @"INSERT INTO visits (user_ip) values (123)";
+
+            //         await insertVisitCommand.ExecuteNonQueryAsync();
+            //     }
 
             return View();
         }

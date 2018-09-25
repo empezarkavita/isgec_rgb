@@ -15,6 +15,8 @@ using System.Data.Common;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Security.Cryptography.X509Certificates;
+using ExposeAPIWithEndpointsCore.eslabs;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExposeAPIWithEndpointsCore
 {
@@ -41,11 +43,20 @@ namespace ExposeAPIWithEndpointsCore
                     new Info { Title = "My API", Version = "v1" });
             });
 
-            services.AddSingleton(typeof(DbConnection), (IServiceProvider) =>
-            InitializeDatabase());
+            // services.AddSingleton(typeof(DbConnection), (IServiceProvider) =>
+            // InitializeDatabase());
 
             // services.AddDbContext<IronManContext>(options =>
             // options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            var connectionString = new MySqlConnectionStringBuilder(
+                Configuration["CloudSql:ConnectionString"])
+            {
+                // Connecting to a local proxy that does not support ssl.
+                SslMode = MySqlSslMode.None,
+            };
+
+            services.AddDbContext<eslabsContext>(options =>
+        options.UseMySql(connectionString.ConnectionString));
 
 
         }

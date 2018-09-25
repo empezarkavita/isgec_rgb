@@ -10,13 +10,16 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5"/>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0"/>
     <PackageReference Include="Newtonsoft.Json" Version="*"/>
-    <PackageReference Include="MySql.Data" Version="*"/>
+    <!-- <PackageReference Include="MySql.Data" Version="*"/> -->
     <PackageReference Include="Google.Cloud.Storage.V1" Version="*"/>
     <PackageReference Include="FireSharp.Serialization.JsonNet" Version="*"/>
     <PackageReference Include="Google.Cloud.Firestore" Version="1.0.0-beta01"/>
     <PackageReference Include="AE.Net.Mail" Version="1.7.10.0"/>
     <PackageReference Include="Google.Apis.Gmail.v1" Version="1.35.1.1328"/>
     <PackageReference Include="EPPlus.Core" Version="*"/>
+ <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.0-preview2-final" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.0-rc" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.yaml" CopyToOutputDirectory="Always"/>
@@ -27,5 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2"/>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.1.0-preview1-final" />
+
   </ItemGroup>
 </Project>
