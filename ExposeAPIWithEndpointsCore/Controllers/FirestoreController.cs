@@ -20,17 +20,17 @@ namespace ExposeAPIWithEndpointsCore.Controllers
 
 
         [HttpGet]
-        public async Task<ViewResult> Index()
+        public ViewResult Index()
         {
 
-            int Id = _context.TblEnbloc.Count();
+            // int Id = _context.TblEnbloc.Count();
 
 
-            TblEnbloc tbl = new TblEnbloc();
-            tbl.Id = Id + 1;
-            tbl.Name = "Sajid";
-            _context.Add(tbl);
-            await _context.SaveChangesAsync();
+            // TblEnbloc tbl = new TblEnbloc();
+            // tbl.Id = Id + 1;
+            // tbl.Name = "Sajid";
+            // _context.Add(tbl);
+            // await _context.SaveChangesAsync();
 
 
             //   var enbloc =  await _context.Enbloc.ToListAsync();

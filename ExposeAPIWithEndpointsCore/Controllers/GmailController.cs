@@ -138,7 +138,7 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                         {
                             Subject = "Re: " + subject.ToString(),
                             
-                            Body ="Your Enbloc has been processed by <b>Empezar's Bot Technology</b>.<br /><br />Transaction Number for the same is :  " + vesselno + "<br /><br />To check live status,please click on the below link.<br /> http://elabs-215913.appspot.com/view/Firestore/Enbloc <br /><br /><br />Thank You.",
+                            Body ="Your Enbloc has been processed by <b>Empezar's Bot Technology</b>.<br /><br />Transaction Number for the same is :  " + vesselno + "<br /><br />To check live status,please click on the below link.<br /> http://demo1-221313.appspot.com/view/Firestore/Enbloc <br /><br /><br />Thank You.",
                             
                             From = new MailAddress("empezar.systems@gmail.com"),
 
@@ -267,13 +267,13 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 var client = StorageClient.Create(credential);
 
                 // Create a bucket
-                string bucketName = "elabs";
+                string bucketName = "cloud1demo";
                 // var bucket = client.CreateBucket("pin-code-recognizer", bucketName);
 
                 // Upload some files
 
                 var obj2 = client.UploadObject(bucketName, "enbloc/" + name, "application/vnd.ms-excel", stream);
-                return "https://storage.cloud.google.com/elabs/enbloc/" + name;
+                return "https://storage.cloud.google.com/cloud1demo/enbloc/" + name;
             }
 
         }

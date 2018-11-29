@@ -1,5 +1,5 @@
 swagger: '2.0'
-host: elabs-215913.appspot.com
+host: demo1-221313.appspot.com
 info:
   version: v1
   title: My API

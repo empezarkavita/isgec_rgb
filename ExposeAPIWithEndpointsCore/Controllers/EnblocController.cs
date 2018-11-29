@@ -128,14 +128,14 @@ namespace ExposeAPIWithEndpointsCore.Controllers
                 var client = StorageClient.Create(credential);
 
                 // Create a bucket
-                string bucketName = "elabs";
+                string bucketName = "cloud1demo";
                 // var bucket = client.CreateBucket("pin-code-recognizer", bucketName);
 
                 // Upload some files
 
                 var obj2 = client.UploadObject(bucketName, "yard/" + name, "image/jpeg", stream);
 
-                snapshot = "https://storage.cloud.google.com/elabs/yard/" + name;
+                snapshot = "https://storage.cloud.google.com/cloud1demo/yard/" + name;
             }
 
 
